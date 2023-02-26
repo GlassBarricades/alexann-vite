@@ -7,6 +7,7 @@ import {
   Burger,
   Title,
   Anchor,
+  Image,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ThemeChange } from "./Theme-change";
@@ -89,7 +90,10 @@ export function HeaderSimple({ links }) {
   return (
     <Header height={60}>
       <Container className={classes.header}>
-        <Title order={3}>207-docs</Title>
+        <Image
+          src={"https://aleksann.by/wp-content/themes/oceanic/images/logo.png"}
+          width={130}
+        />
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>

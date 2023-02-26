@@ -28,11 +28,9 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <HeaderSimple links={links} />
-        <Container>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
-        </Container>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
       </div>
     </BrowserRouter>
   );
