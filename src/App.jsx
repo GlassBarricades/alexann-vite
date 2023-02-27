@@ -3,6 +3,7 @@ import { HeaderSimple } from "./components/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Container } from "@mantine/core";
 import HomePage from "./components/pages/HomePage";
+import { ContactsPage } from "./components/pages/ContactsPage";
 
 function App() {
   const links = [
@@ -30,6 +31,7 @@ function App() {
         <HeaderSimple links={links} />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
         </Routes>
       </div>
     </BrowserRouter>
