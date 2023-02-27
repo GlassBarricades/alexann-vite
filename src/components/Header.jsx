@@ -5,7 +5,6 @@ import {
   Container,
   Group,
   Burger,
-  Title,
   Anchor,
   Image,
 } from "@mantine/core";

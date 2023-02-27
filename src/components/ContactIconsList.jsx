@@ -1,30 +1,40 @@
-import { createStyles, ThemeIcon, Text, SimpleGrid, Box, Stack } from '@mantine/core';
-import { Sun, Phone, MapPin, At } from 'tabler-icons-react';
+import {
+  createStyles,
+  ThemeIcon,
+  Text,
+  SimpleGrid,
+  Box,
+  Stack,
+} from "@mantine/core";
+import { Sun, Phone, MapPin, At } from "tabler-icons-react";
 
 const useStyles = createStyles((theme, { variant }) => ({
   wrapper: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     color: theme.white,
   },
 
   icon: {
     marginRight: theme.spacing.md,
     backgroundImage:
-      variant === 'gradient'
+      variant === "gradient"
         ? `linear-gradient(135deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
             theme.colors[theme.primaryColor][6]
           } 100%)`
-        : 'none',
-    backgroundColor: 'transparent',
+        : "none",
+    backgroundColor: "transparent",
   },
 
   title: {
-    color: variant === 'gradient' ? theme.colors.gray[6] : theme.colors[theme.primaryColor][0],
+    color:
+      variant === "gradient"
+        ? theme.colors.gray[6]
+        : theme.colors[theme.primaryColor][0],
   },
 
   description: {
-    color: variant === 'gradient' ? theme.black : theme.white,
+    color: variant === "gradient" ? theme.black : theme.white,
   },
 }));
 
@@ -32,14 +42,14 @@ function ContactIcon({
   icon: Icon,
   title,
   description,
-  variant = 'gradient',
+  variant = "gradient",
   className,
   ...others
 }) {
   const { classes, cx } = useStyles({ variant });
   return (
     <div className={cx(classes.wrapper, className)} {...others}>
-      {variant === 'gradient' ? (
+      {variant === "gradient" ? (
         <ThemeIcon size={40} radius="md" className={classes.icon}>
           <Icon size={24} />
         </ThemeIcon>
@@ -60,14 +70,24 @@ function ContactIcon({
 }
 
 const MOCKDATA = [
-  { title: 'Email', description: 'hello@mantine.dev', icon: At },
-  { title: 'Phone', description: '+49 (800) 335 35 35', icon: Phone },
-  { title: 'Address', description: '844 Morris Park avenue', icon: MapPin },
-  { title: 'Working hours', description: '8 a.m. – 11 p.m.', icon: Sun },
+  { title: "Email", description: "info@aleksann.by", icon: At },
+  { title: "Телефон", description: "+375 (29) 695-21-40", icon: Phone },
+  {
+    title: "Адрес",
+    description: "г. Жодино, ул. Рокоссовского 16, корпус 1, цокольный этаж",
+    icon: MapPin,
+  },
+  {
+    title: "Working hours",
+    description: "ПН-ПТ: 9.00-19.00 СБ: 10.00-18.00 ВС: выходной",
+    icon: Sun,
+  },
 ];
 
 export function ContactIconsList({ data = MOCKDATA, variant }) {
-  const items = data.map((item, index) => <ContactIcon key={index} variant={variant} {...item} />);
+  const items = data.map((item, index) => (
+    <ContactIcon key={index} variant={variant} {...item} />
+  ));
   return <Stack>{items}</Stack>;
 }
 
@@ -88,9 +108,9 @@ export function ContactIcons() {
         sx={(theme) => ({
           padding: theme.spacing.xl,
           borderRadius: theme.radius.md,
-          backgroundImage: `linear-gradient(135deg, ${theme.colors[theme.primaryColor][6]} 0%, ${
-            theme.colors[theme.primaryColor][4]
-          } 100%)`,
+          backgroundImage: `linear-gradient(135deg, ${
+            theme.colors[theme.primaryColor][6]
+          } 0%, ${theme.colors[theme.primaryColor][4]} 100%)`,
         })}
       >
         <ContactIconsList variant="white" />
