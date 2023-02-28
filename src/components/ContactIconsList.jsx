@@ -78,7 +78,7 @@ const MOCKDATA = [
     icon: MapPin,
   },
   {
-    title: "Working hours",
+    title: "Время работы",
     description: "ПН-ПТ: 9.00-19.00 СБ: 10.00-18.00 ВС: выходной",
     icon: Sun,
   },
