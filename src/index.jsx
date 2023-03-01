@@ -29,9 +29,17 @@ function Main() {
                   wordSpacing: "0.05em",
                   lineHeight: "1.6em",
                   letterSpacing: "0.05em",
-                  textAlign: "left",
                 },
               },
+            },
+            Title: {
+              styles: (theme) => ({
+                root: {
+                  fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+                  color: theme.colorScheme === "dark" ? theme.colors.yellow[5] : theme.black,
+                  
+                }
+              })
             },
             Table: {
               styles: {

@@ -46,7 +46,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   highlight: {
-    color: theme.colors[theme.primaryColor][4],
+    color: theme.colorScheme === "dark" ? theme.colors.yellow[5] : theme.colors[theme.primaryColor][4],
   },
 
   description: {
@@ -106,29 +106,27 @@ export function HeroSection() {
 
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Automated AI code reviews for{" "}
+          Магазин напольных покрытий{" "}
           <Text component="span" inherit className={classes.highlight}>
-            any stack
+            АлексАнн
           </Text>
         </Title>
 
         <Container size={640}>
           <Text size="lg" className={classes.description}>
-            Build more reliable software with AI companion. AI is also trained
-            to detect lazy developers who do nothing and just complain on
-            Twitter.
+          Нас не рекламируют, нас рекомендуют друзьям!
           </Text>
         </Container>
 
         <div className={classes.controls}>
           <Button className={classes.control} variant="white" size="lg">
-            Get started
+            Каталог
           </Button>
           <Button
             className={cx(classes.control, classes.secondaryControl)}
             size="lg"
           >
-            Live demo
+            Услуги
           </Button>
         </div>
       </div>

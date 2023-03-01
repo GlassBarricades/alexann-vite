@@ -9,6 +9,7 @@ import {
   Group,
   ActionIcon,
   Container,
+  useMantineColorScheme
 } from "@mantine/core";
 import { BrandTwitter, BrandYoutube, BrandInstagram } from "tabler-icons-react";
 import { ContactIconsList } from "../ContactIconsList";
@@ -31,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 
   title: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    color: theme.white,
+    color: theme.colorScheme === "dark" ? theme.colors.yellow[5] : theme.white,
     lineHeight: 1,
   },
 
@@ -45,7 +46,9 @@ const useStyles = createStyles((theme) => ({
   },
 
   form: {
-    backgroundColor: theme.white,
+    backgroundColor: theme.colorScheme === "dark"
+    ? theme.colors.dark[4]
+    : theme.white,
     padding: theme.spacing.xl,
     borderRadius: theme.radius.md,
     boxShadow: theme.shadows.lg,
@@ -70,11 +73,9 @@ const useStyles = createStyles((theme) => ({
   },
 
   inputLabel: {
-    color: theme.black,
-  },
-
-  control: {
-    backgroundColor: theme.colors[theme.primaryColor][6],
+    color: theme.colorScheme === "dark"
+    ? theme.white
+    : theme.colors.dark[6],
   },
 }));
 
@@ -82,6 +83,7 @@ const social = [BrandTwitter, BrandYoutube, BrandInstagram];
 
 export function ContactsPage() {
   const { classes } = useStyles();
+  const colorScheme = useMantineColorScheme();
 
   const icons = social.map((Icon, index) => (
     <ActionIcon
@@ -136,7 +138,7 @@ export function ContactsPage() {
             />
 
             <Group position="right" mt="md">
-              <Button className={classes.control}>Отправить сообщение</Button>
+              <Button variant={colorScheme.colorScheme === "dark" ? "light" : "filled"}>Отправить сообщение</Button>
             </Group>
           </div>
         </SimpleGrid>
