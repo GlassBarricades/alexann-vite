@@ -17,13 +17,15 @@ const useStyles = createStyles((theme, { variant }) => ({
 
   icon: {
     marginRight: theme.spacing.md,
-    backgroundImage:
-      variant === "gradient"
-        ? `linear-gradient(135deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
-            theme.colors[theme.primaryColor][6]
-          } 100%)`
-        : "none",
+    // backgroundImage:
+    //   variant === "gradient"
+    //     ? `linear-gradient(135deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
+    //         theme.colors[theme.primaryColor][6]
+    //       } 100%)`
+    //     : "none",
+
     backgroundColor: "transparent",
+    color: theme.colorScheme === "dark" ? theme.colors.yellow[5] : theme.white
   },
 
   title: {
@@ -49,15 +51,10 @@ function ContactIcon({
   const { classes, cx } = useStyles({ variant });
   return (
     <div className={cx(classes.wrapper, className)} {...others}>
-      {variant === "gradient" ? (
         <ThemeIcon size={40} radius="md" className={classes.icon}>
           <Icon size={24} />
         </ThemeIcon>
-      ) : (
-        <Box mr="md">
-          <Icon size={24} />
-        </Box>
-      )}
+
 
       <div>
         <Text size="xs" className={classes.title}>

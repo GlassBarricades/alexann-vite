@@ -5,6 +5,7 @@ import { ContactsPage } from "./components/pages/ContactsPage";
 import ServicesPage from "./components/pages/ServicesPage";
 import AboutUsPage from "./components/pages/AboutUsPage";
 import CatalogPage from "./components/pages/CatalogPage";
+import DeliveryPage from "./components/pages/DeliveryPage";
 
 function App() {
   const links = [
@@ -19,6 +20,10 @@ function App() {
     {
       link: "/services",
       label: "Услуги",
+    },
+    {
+      link: "/delivery",
+      label: "Доставка",
     },
     {
       link: "/about-us",
@@ -40,6 +45,7 @@ function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/delivery" element={<DeliveryPage />} />
         </Routes>
       </div>
     </BrowserRouter>
