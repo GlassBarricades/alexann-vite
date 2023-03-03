@@ -6,6 +6,8 @@ import ServicesPage from "./components/pages/ServicesPage";
 import AboutUsPage from "./components/pages/AboutUsPage";
 import CatalogPage from "./components/pages/CatalogPage";
 import DeliveryPage from "./components/pages/DeliveryPage";
+import CatalogGrid from "./components/catalog/CatalogGrid";
+import AdminPage from "./components/pages/AdminPage";
 
 function App() {
   const links = [
@@ -33,6 +35,22 @@ function App() {
       link: "/contacts",
       label: "Контакты",
     },
+    {
+      link: "/admin",
+      label: "Админка",
+    },
+  ];
+  const dataCategory = [
+    { name: "Ламинат", link: "laminate" },
+    { name: "Линолеум", link: "linoleum" },
+    { name: "Виниловое покрытие", link: "vinyl-flooring" },
+    { name: "Межкомнатные двери", link: "interior-doors" },
+    { name: "Входные двери", link: "entrance-doors" },
+    { name: "Водосточная система", link: "drainage-system" },
+    { name: "Сайдинг", link: "siding" },
+    { name: "Ковровое покрытия", link: "carpet-covering" },
+    { name: "Панели ПВХ", link: "pvc-panels" },
+    { name: "Панели МДФ", link: "mdf-panels" },
   ];
 
   return (
@@ -41,11 +59,22 @@ function App() {
         <HeaderSimple links={links} />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/contacts" element={<ContactsPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/catalog" element={<CatalogPage />} />
-          <Route path="/delivery" element={<DeliveryPage />} />
+          <Route path="contacts" element={<ContactsPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="about-us" element={<AboutUsPage />} />
+          <Route
+            path="catalog/*"
+            element={<CatalogPage dataCategory={dataCategory} />}
+          />
+          <Route
+            path="catalog/:category"
+            element={<CatalogGrid dataCategory={dataCategory} />}
+          />
+          <Route path="delivery" element={<DeliveryPage />} />
+          <Route
+            path="admin/*"
+            element={<AdminPage dataCategory={dataCategory} />}
+          />
         </Routes>
       </div>
     </BrowserRouter>

@@ -7,6 +7,7 @@ import {
   Title,
   List,
   Flex,
+  Skeleton,
 } from "@mantine/core";
 
 const DeliveryPage = () => {
@@ -14,7 +15,12 @@ const DeliveryPage = () => {
     <Container>
       <Grid mt="xl">
         <Grid.Col sm={6}>
-          <Flex style={{height: "100%"}} direction="column" justify="center" align="center">
+          <Flex
+            style={{ height: "100%" }}
+            direction="column"
+            justify="center"
+            align="center"
+          >
             <Title align="center" mb="md">
               Доставка
             </Title>
