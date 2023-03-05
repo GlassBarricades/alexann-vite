@@ -1,33 +1,28 @@
 import { useState } from "react";
-import {
-  Title,
-  Button,
-  Modal,
-  TextInput,
-  Textarea,
-  Text,
-  Stack,
-} from "@mantine/core";
+import { Button, Title, Modal, TextInput, Textarea } from "@mantine/core";
+import { useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
+import useFetchData from "../../hooks/useFetchData";
 import { db } from "../../firebase";
 import { uid } from "uid";
 import { set, ref, update } from "firebase/database";
-import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
 
-const AdminLaminate = () => {
+const LaminateCollection = () => {
+  const { collection } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [description, setDescription] = useState("");
   const [advantages, setAdvantages] = useState("");
-
-  const [laminateVendors] = useFetchData(`/laminate/`);
+  const [laminateCollection] = useFetchData(
+    `/laminate/${collection}/collection`
+  );
 
   const writeToDatabase = (e) => {
     e.preventDefault();
     const uuid = uid();
-    set(ref(db, `/laminate/${name}`), {
+    set(ref(db, `/laminate/${collection}/collection/${name}`), {
       name,
       position,
       description,
@@ -46,7 +41,7 @@ const AdminLaminate = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title="Добавление производителя ламината"
+        title={`Добавить коллекцию ${collection}`}
       >
         <form id="driver-form" onSubmit={writeToDatabase}>
           <TextInput
@@ -64,16 +59,16 @@ const AdminLaminate = () => {
             required
           />
           <Textarea
-            placeholder="Описание производителя"
-            label="Описание производителя"
+            placeholder="Описание коллекции"
+            label="Описание коллекции"
             autosize
             minRows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
           <Textarea
-            placeholder="Преимущества производителя"
-            label="Преимущества производителя"
+            placeholder="Преимущества коллекции"
+            label="Преимущества коллекции"
             autosize
             minRows={3}
             value={advantages}
@@ -85,11 +80,11 @@ const AdminLaminate = () => {
           </Button>
         </form>
       </Modal>
-      <Title order={3}>Производители</Title>
+      <Title order={3}>{collection}</Title>
       <Button onClick={open} variant="default">
-        Добавить производителя
+        Добавить коллекцию
       </Button>
-      {laminateVendors.map((item, index) => {
+      {laminateCollection.map((item, index) => {
         return (
           <Button component={Link} to={item.name} key={index}>
             {item.name}
@@ -99,4 +94,4 @@ const AdminLaminate = () => {
     </>
   );
 };
-export default AdminLaminate;
+export default LaminateCollection;

@@ -1,6 +1,7 @@
 import { Button, Navbar, Title, AppShell, Stack } from "@mantine/core";
 import { Route, Routes, Link } from "react-router-dom";
 import AdminLaminate from "../admin/AdminLaminate";
+import LaminateCollection from "../catalog/LaminateCollection";
 
 const AdminPage = ({ dataCategory }) => {
   return (
@@ -52,6 +53,10 @@ const AdminPage = ({ dataCategory }) => {
       >
         <Routes>
           <Route path={"laminate"} element={<AdminLaminate />} />
+          <Route
+            path={"laminate/:collection"}
+            element={<LaminateCollection />}
+          />
         </Routes>
       </AppShell>
     </>
