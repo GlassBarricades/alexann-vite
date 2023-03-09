@@ -36,7 +36,7 @@ function App() {
       label: "Контакты",
     },
     {
-      link: "/admin",
+      link: "/admin/laminate",
       label: "Админка",
     },
   ];
