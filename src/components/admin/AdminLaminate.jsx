@@ -46,6 +46,7 @@ const AdminLaminate = () => {
       <Modal
         opened={opened}
         onClose={close}
+        centered
         title="Добавление производителя ламината"
       >
         <form id="driver-form" onSubmit={writeToDatabase}>

@@ -7,7 +7,7 @@ import {
   Burger,
   Anchor,
   Image,
-  Drawer
+  Drawer,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ThemeChange } from "./Theme-change";
@@ -88,7 +88,7 @@ export function HeaderSimple({ links }) {
   ));
 
   return (
-    <Header height={60} fixed={true}>
+    <Header height={60}>
       <Container className={classes.header}>
         <Image
           src={"https://aleksann.by/wp-content/themes/oceanic/images/logo.png"}
