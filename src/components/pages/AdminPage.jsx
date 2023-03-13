@@ -1,6 +1,8 @@
 import { Button, Navbar, Title, AppShell, Stack } from "@mantine/core";
 import { Route, Routes, Link } from "react-router-dom";
 import AdminLaminate from "../admin/AdminLaminate";
+import CollectionAdmin from "../admin/CollectionAdmin";
+import ColorAdmin from "../admin/ColorAdmin";
 import LaminateCollection from "../catalog/LaminateCollection";
 
 const AdminPage = ({ dataCategory }) => {
@@ -35,9 +37,6 @@ const AdminPage = ({ dataCategory }) => {
                     </Button>
                   );
                 })}
-                <Button variant="default" component={Link} to={"laminate"}>
-                  Ламинат
-                </Button>
               </Stack>
             </Navbar.Section>
           </Navbar>
@@ -56,6 +55,14 @@ const AdminPage = ({ dataCategory }) => {
           <Route
             path={"laminate/:collection"}
             element={<LaminateCollection />}
+          />
+          <Route
+            path={"laminate/:collection/:color"}
+            element={<CollectionAdmin />}
+          />
+          <Route
+            path={"laminate/:collection/:color/:colorName"}
+            element={<ColorAdmin />}
           />
         </Routes>
       </AppShell>

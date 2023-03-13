@@ -8,6 +8,8 @@ import CatalogPage from "./components/pages/CatalogPage";
 import DeliveryPage from "./components/pages/DeliveryPage";
 import CatalogGrid from "./components/catalog/CatalogGrid";
 import AdminPage from "./components/pages/AdminPage";
+import VendorPage from "./components/catalog/VendorPage";
+import CollectionPage from "./components/catalog/CollectionPage";
 
 function App() {
   const links = [
@@ -63,12 +65,20 @@ function App() {
           <Route path="services" element={<ServicesPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
           <Route
-            path="catalog/*"
+            path="catalog/"
             element={<CatalogPage dataCategory={dataCategory} />}
           />
           <Route
             path="catalog/:category"
             element={<CatalogGrid dataCategory={dataCategory} />}
+          />
+           <Route
+            path="catalog/:category/:vendor"
+            element={<VendorPage />}
+          />
+          <Route
+            path="catalog/:category/:vendor/:collection"
+            element={<CollectionPage />}
           />
           <Route path="delivery" element={<DeliveryPage />} />
           <Route
