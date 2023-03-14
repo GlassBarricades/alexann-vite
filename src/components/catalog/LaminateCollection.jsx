@@ -8,6 +8,7 @@ import {
   Grid,
   Checkbox,
   Group,
+  Stack
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
@@ -36,6 +37,7 @@ const LaminateCollection = () => {
   const [warmFloor, setWarmFloor] = useState(false);
   const [warrantyPeriod, setWarrantyPeriod] = useState("");
   const [country, setCountry] = useState("");
+  const [image, setImage] = useState("");
   const [laminateCollection] = useFetchData(
     `/laminate/${collection}/collection`
   );
@@ -59,6 +61,7 @@ const LaminateCollection = () => {
       warmFloor,
       warrantyPeriod,
       country,
+      image,
       uuid,
     });
 
@@ -77,6 +80,7 @@ const LaminateCollection = () => {
     setWarmFloor("");
     setWarrantyPeriod("");
     setCountry("");
+    setImage("");
     close();
   };
   return (
@@ -200,6 +204,12 @@ const LaminateCollection = () => {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
+              <TextInput
+                label="Картинка"
+                placeholder="Картинка"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
             </Grid.Col>
           </Grid>
           <Button mt="md" type="submit">
@@ -211,13 +221,15 @@ const LaminateCollection = () => {
       <Button onClick={open} variant="default">
         Добавить коллекцию
       </Button>
-      {laminateCollection.map((item, index) => {
-        return (
-          <Button component={Link} to={item.name} key={index}>
-            {item.name}
-          </Button>
-        );
-      })}
+      <Stack>
+        {laminateCollection.map((item, index) => {
+          return (
+            <Button component={Link} to={item.name} key={index}>
+              {item.name}
+            </Button>
+          );
+        })}
+      </Stack>
     </>
   );
 };

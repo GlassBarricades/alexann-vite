@@ -21,9 +21,12 @@ const ColorAdmin = () => {
   const { colorName, collection, color } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
   const [foto, setFoto] = useState("");
+  const [foto2, setFoto2] = useState("");
+  const [foto3, setFoto3] = useState("");
   const [fotoData] = useFetchData(
     `/laminate/${collection}/collection/${color}/colors/${colorName}/photo/`
   );
+  console.log(fotoData)
 
   const writeToDatabase = (e) => {
     e.preventDefault();
@@ -34,22 +37,37 @@ const ColorAdmin = () => {
       ),
       {
         foto,
+        foto2,
+        foto3
       }
     );
 
     setFoto("");
+    setFoto2("");
+    setFoto3("");
     close();
   };
   return (
     <>
-      <Modal opened={opened} onClose={close} title={`Добавить цвет ${color}`}>
+      <Modal opened={opened} onClose={close} title={`Добавить картинки ${colorName}`}>
         <form id="driver-form" onSubmit={writeToDatabase}>
           <TextInput
-            label="Название"
-            placeholder="Название"
+            label="Картинка"
+            placeholder="Картинка"
             value={foto}
             onChange={(e) => setFoto(e.target.value)}
-            required
+          />
+          <TextInput
+            label="Картинка"
+            placeholder="Картинка"
+            value={foto2}
+            onChange={(e) => setFoto2(e.target.value)}
+          />
+          <TextInput
+            label="Картинка"
+            placeholder="Картинка"
+            value={foto3}
+            onChange={(e) => setFoto3(e.target.value)}
           />
           <Button mt="md" type="submit">
             Создать

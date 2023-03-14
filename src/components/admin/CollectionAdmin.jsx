@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   Anchor,
+  Image,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import useFetchDataOne from "../../hooks/useFetchDataOne";
@@ -45,6 +46,7 @@ const CollectionAdmin = () => {
     warmFloor,
     warrantyPeriod,
     waterResistance,
+    image,
   } = collectionData;
 
   const writeToDatabase = (e) => {
@@ -104,6 +106,7 @@ const CollectionAdmin = () => {
       <Stack>
         <Text>{position}</Text>
         <Text>{name}</Text>
+        <Image src={image}/>
         <Text>{description}</Text>
         <Text>{advantages}</Text>
         <Text>{abrasionClass}</Text>
