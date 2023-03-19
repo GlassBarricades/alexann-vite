@@ -1,102 +1,62 @@
-import { useState } from "react";
 import {
   Title,
   Button,
   Modal,
-  TextInput,
-  Textarea,
   Text,
-  Stack,
+  Card,
+  Image,
+  Grid,
+  Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { db } from "../../firebase";
-import { uid } from "uid";
-import { set, ref, update } from "firebase/database";
+import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
+import AdminLaminateForm from "./AdminLaminateForm";
 
 const AdminLaminate = () => {
+  const { vendors } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
-  const [name, setName] = useState("");
-  const [position, setPosition] = useState("");
-  const [description, setDescription] = useState("");
-  const [advantages, setAdvantages] = useState("");
+  const [laminateVendors] = useFetchData(`/${vendors}/`);
 
-  const [laminateVendors] = useFetchData(`/laminate/`);
-
-  const writeToDatabase = (e) => {
-    e.preventDefault();
-    const uuid = uid();
-    set(ref(db, `/laminate/${name}`), {
-      name,
-      position,
-      description,
-      advantages,
-      uuid,
-    });
-
-    setPosition("");
-    setName("");
-    setDescription("");
-    setAdvantages("");
-    close();
-  };
   return (
     <>
       <Modal
         opened={opened}
         onClose={close}
         centered
-        title="Добавление производителя ламината"
+        title="Добавление производителя"
       >
-        <form id="driver-form" onSubmit={writeToDatabase}>
-          <TextInput
-            label="Позиция в каталоге"
-            placeholder="Позиция в каталоге"
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-            required
-          />
-          <TextInput
-            label="Название"
-            placeholder="Название"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <Textarea
-            placeholder="Описание производителя"
-            label="Описание производителя"
-            autosize
-            minRows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <Textarea
-            placeholder="Преимущества производителя"
-            label="Преимущества производителя"
-            autosize
-            minRows={3}
-            value={advantages}
-            onChange={(e) => setAdvantages(e.target.value)}
-          />
-
-          <Button mt="md" type="submit">
-            Отправить
-          </Button>
-        </form>
+        <AdminLaminateForm vendors={vendors} close={close} />
       </Modal>
-      <Title order={3}>Производители</Title>
-      <Button onClick={open} variant="default">
-        Добавить производителя
-      </Button>
-      {laminateVendors.map((item, index) => {
-        return (
-          <Button component={Link} to={item.name} key={index}>
-            {item.name}
-          </Button>
-        );
-      })}
+      <Group position="apart">
+        <Title order={2}>Производители</Title>
+        <Button onClick={open} variant="default">
+          Добавить производителя
+        </Button>
+      </Group>
+      <Grid mt="lg">
+        {laminateVendors.map((item, index) => {
+          return (
+            <Grid.Col md={2} key={index}>
+              <Card shadow="sm" padding="xl" component={Link} to={item.name}>
+                <Card.Section p="md">
+                  <Image
+                    fit="contain"
+                    src={item.image}
+                    height={160}
+                    alt={item.name}
+                  />
+                </Card.Section>
+
+                <Text weight={500} size="lg" mt="md">
+                  {item.name}
+                </Text>
+              </Card>
+            </Grid.Col>
+          );
+        })}
+      </Grid>
     </>
   );
 };

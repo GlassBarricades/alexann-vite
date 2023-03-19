@@ -51,17 +51,17 @@ const AdminPage = ({ dataCategory }) => {
         })}
       >
         <Routes>
-          <Route path={"laminate"} element={<AdminLaminate />} />
+          <Route path={"/:vendors"} element={<AdminLaminate />} />
           <Route
-            path={"laminate/:collection"}
+            path={"/:vendors/:collection"}
             element={<LaminateCollection />}
           />
           <Route
-            path={"laminate/:collection/:color"}
+            path={"/:vendors/:collection/:color"}
             element={<CollectionAdmin />}
           />
           <Route
-            path={"laminate/:collection/:color/:colorName"}
+            path={"/:vendors/:collection/:color/:colorName"}
             element={<ColorAdmin />}
           />
         </Routes>

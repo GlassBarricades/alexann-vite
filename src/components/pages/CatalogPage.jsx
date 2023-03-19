@@ -1,41 +1,30 @@
-import {
-  Button,
-  Container,
-  Title,
-  Box,
-  BackgroundImage,
-  Text,
-  Center,
-  Grid,
-} from "@mantine/core";
-import { Route, Routes, Link } from "react-router-dom";
-import CatalogGrid from "../catalog/CatalogGrid";
-import LaminateCatalog from "../catalog/LaminateCatalog";
+import { Container, Title, Text, Grid, Card, Image } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 const CatalogPage = ({ dataCategory }) => {
   return (
     <Container>
       <Title>Каталог</Title>
-      <Grid mt="xl">
+      <Grid mt="lg">
         {dataCategory.map((item, index) => {
           return (
-            <Box
-              key={index}
-              mr="md"
-              mb="md"
-              maw={300}
-              component={Link}
-              to={item.link}
-            >
-              <BackgroundImage
-                src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-                radius="sm"
+            <Grid.Col xs={6} sm={4} lg={3} key={index}>
+              <Card
+                shadow="sm"
+                padding="xl"
+                component={Link}
+                to={item.link}
+                style={{ minHeight: "250px" }}
               >
-                <Center p="md">
-                  <Text color="#fff">{item.name}</Text>
-                </Center>
-              </BackgroundImage>
-            </Box>
+                <Card.Section>
+                  <Image src={item.image} height={160} alt="No way!" />
+                </Card.Section>
+
+                <Text weight={500} size="lg" mt="xs">
+                  {item.name}
+                </Text>
+              </Card>
+            </Grid.Col>
           );
         })}
       </Grid>

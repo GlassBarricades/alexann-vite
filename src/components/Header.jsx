@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocalStorage } from "@mantine/hooks";
 import {
   createStyles,
   Header,
@@ -68,8 +69,13 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderSimple({ links }) {
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
+  //const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
+  const [active, setActive] = useLocalStorage({
+    key: "active-link",
+    defaultValue: links[0].link,
+    getInitialValueInEffect: true,
+  });
 
   const items = links.map((link) => (
     <Anchor
