@@ -45,6 +45,8 @@ const CollectionAdmin = () => {
     loadClass,
     lock,
     name,
+    basis,
+    protectiveLayerThickness,
     panelSize,
     position,
     thickness,
@@ -54,7 +56,6 @@ const CollectionAdmin = () => {
     waterResistance,
     image,
   } = collectionData;
-  console.log(collectionData);
 
   const writeToDatabase = (e) => {
     e.preventDefault();
@@ -62,7 +63,7 @@ const CollectionAdmin = () => {
     set(
       ref(
         db,
-        `/laminate/${collection}/collection/${color}/colors/${nameColor}`
+        `/${vendors}/${collection}/collection/${color}/colors/${nameColor}`
       ),
       {
         nameColor,
@@ -74,7 +75,7 @@ const CollectionAdmin = () => {
     set(
       ref(
         db,
-        `/laminate/${collection}/collection/${color}/colors/${nameColor}/photo/`
+        `/${vendors}/${collection}/collection/${color}/colors/${nameColor}/photo/`
       ),
       {
         foto,
@@ -178,19 +179,33 @@ const CollectionAdmin = () => {
           <Stack>
             <Text>Позиция в каталоге: {position}</Text>
             <Text>Название коллекции: {name}</Text>
-            <Text>Класс истирания: {abrasionClass}</Text>
-            <Text>Упаковка: {amountPackage}</Text>
-            <Text>Фаска: {chamfer}</Text>
+            {vendors === "laminate" ? (
+              <Text>Класс истирания: {abrasionClass}</Text>
+            ) : undefined}
+            {vendors === "laminate" ? (
+              <Text>Упаковка: {amountPackage}</Text>
+            ) : undefined}
+            {vendors === "laminate" ? <Text>Фаска: {chamfer}</Text> : undefined}
             <Text>Класс нагрузки: {loadClass}</Text>
-            <Text>Замок: {lock}</Text>
-            <Text>Размер панелей: {panelSize} мм</Text>
+            {vendors === "laminate" ? <Text>Замок: {lock}</Text> : undefined}
+            {vendors === "laminate" ? (
+              <Text>Размер панелей: {panelSize} мм</Text>
+            ) : undefined}
             <Text>ID: {uuid}</Text>
+            {vendors === "linoleum" ? <Text>Основа: {basis}</Text> : undefined}
             <Text>Толщина: {thickness} мм</Text>
-            <Text>
-              Совместимость с теплым полом: {warmFloor ? "да" : "нет"}
-            </Text>
+            {vendors === "laminate" ? (
+              <Text>
+                Совместимость с теплым полом: {warmFloor ? "да" : "нет"}
+              </Text>
+            ) : undefined}
+            {vendors === "linoleum" ? (
+              <Text>Толщина защитного слоя: {protectiveLayerThickness}</Text>
+            ) : undefined}
             <Text>Гарантийный срок: {warrantyPeriod}</Text>
-            <Text>Водонепроницаемость: {waterResistance ? "да" : "нет"}</Text>
+            {vendors === "laminate" ? (
+              <Text>Водонепроницаемость: {waterResistance ? "да" : "нет"}</Text>
+            ) : undefined}
             <Text>Страна производитель: {country}</Text>
             <Stack>
               <Title order={5}>
