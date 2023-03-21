@@ -88,6 +88,7 @@ const AdminLaminate = () => {
       <Modal
         opened={opened}
         onClose={close}
+        size="xl"
         centered
         title="Добавление производителя"
       >

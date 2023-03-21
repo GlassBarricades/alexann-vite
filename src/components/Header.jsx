@@ -94,7 +94,14 @@ export function HeaderSimple({ links }) {
   ));
 
   return (
-    <Header height={60}>
+    <Header
+      height={60}
+      styles={() => ({
+        root: {
+          position: "sticky",
+        },
+      })}
+    >
       <Container className={classes.header}>
         <Image
           src={"https://aleksann.by/wp-content/themes/oceanic/images/logo.png"}
