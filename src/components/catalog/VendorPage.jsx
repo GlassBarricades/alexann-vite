@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Container,
   Group,
   Image,
@@ -26,7 +25,6 @@ const VendorPage = () => {
         <Image fit="contain" width={220} src={image} alt={name} />
       </Group>
       <Stack>
-        <Group>
           <Title order={4}>Коллекции: </Title>
           <Grid>
             {collectionData.map((item, index) => {
@@ -50,7 +48,6 @@ const VendorPage = () => {
               );
             })}
           </Grid>
-        </Group>
         <Stack>
           <Title order={4}>Описание</Title>
           <Text>{description}</Text>
