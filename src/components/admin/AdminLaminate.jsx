@@ -12,7 +12,7 @@ import {
   Textarea,
   ActionIcon,
   Checkbox,
-  useMantineColorScheme
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import { useParams } from "react-router-dom";
@@ -134,14 +134,12 @@ const AdminLaminate = () => {
             required
           />
           <Checkbox
-              mt="xs"
-              size="md"
-              label="Скрыть"
-              checked={visible}
-              onChange={(event) =>
-                setVisible(event.currentTarget.checked)
-              }
-            />
+            mt="xs"
+            size="md"
+            label="Скрыть"
+            checked={visible}
+            onChange={(event) => setVisible(event.currentTarget.checked)}
+          />
           <Textarea
             placeholder="Описание производителя"
             label="Описание производителя"
@@ -176,7 +174,7 @@ const AdminLaminate = () => {
       <Grid mt="lg">
         {laminateVendors.map((item, index) => {
           return (
-            <Grid.Col sm={4} xs={6} md={3} lg={2} key={index}>
+            <Grid.Col sm={6} xs={12} md={4} lg={3} xl={2} key={index}>
               <Card shadow="sm" padding="xl" component={Link} to={item.name}>
                 <Card.Section p="md">
                   <Image
@@ -194,25 +192,37 @@ const AdminLaminate = () => {
               <Group>
                 <ActionIcon
                   mt="xs"
-                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
+                  variant={
+                    colorScheme.colorScheme === "dark" ? "outline" : "default"
+                  }
                   onClick={() => handleEdit(item)}
-                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
+                  color={
+                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
+                  }
                 >
                   <Pencil size="1rem" />
                 </ActionIcon>
                 <ActionIcon
                   mt="xs"
-                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
+                  variant={
+                    colorScheme.colorScheme === "dark" ? "outline" : "default"
+                  }
                   onClick={() => handleDelete(item, vendors)}
-                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
+                  color={
+                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
+                  }
                 >
                   <Trash size="1rem" />
                 </ActionIcon>
                 <ActionIcon
                   mt="xs"
-                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
+                  variant={
+                    colorScheme.colorScheme === "dark" ? "outline" : "default"
+                  }
                   onClick={() => handleEditVisible(item)}
-                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
+                  color={
+                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
+                  }
                 >
                   {item.visible ? <EyeOff size="1rem" /> : <Eye size="1rem" />}
                 </ActionIcon>

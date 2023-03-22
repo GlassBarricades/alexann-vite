@@ -18,7 +18,13 @@ const VendorPage = () => {
   const [vendorData] = useFetchDataOne(`/${category}/${vendor}`);
   const [collectionData] = useFetchData(`/${category}/${vendor}/collection/`);
   const { name, image, description, advantages } = vendorData;
-  
+
+  const fileredCollectionData = collectionData.filter((item) => {
+    if (item.visible === false) {
+      return item;
+    }
+  });
+
   return (
     <Container>
       <Group mt="md" position="apart">
@@ -26,27 +32,9 @@ const VendorPage = () => {
         <Image fit="contain" width={220} src={image} alt={name} />
       </Group>
       <Stack>
-        <Title>Коллекции: </Title>
-        <Grid>
-          {collectionData.map((item, index) => {
-            return (
-              <Grid.Col sm={4} xs={6} md={3} key={index}>
-                <Card shadow="sm" padding="xl" component={Link} to={item.name}>
-                  <Card.Section>
-                    <Image src={item.image} height={160} alt="No way!" />
-                  </Card.Section>
-
-                  <Text weight={500} size="lg" mt="md">
-                    {item.name}
-                  </Text>
-                </Card>
-              </Grid.Col>
-            );
-          })}
-        </Grid>
         <Title order={4}>Коллекции: </Title>
         <Grid>
-          {collectionData.map((item, index) => {
+          {fileredCollectionData.map((item, index) => {
             return (
               <Grid.Col sm={4} xs={6} md={3} key={index}>
                 <Card shadow="sm" padding="xl" component={Link} to={item.name}>

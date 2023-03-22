@@ -3,7 +3,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import AdminLaminate from "../admin/AdminLaminate";
 import CollectionAdmin from "../admin/CollectionAdmin";
 import ColorAdmin from "../admin/ColorAdmin";
-import LaminateCollection from "../catalog/LaminateCollection";
+import LaminateCollection from "../admin/LaminateCollection";
 
 const AdminPage = ({ dataCategory }) => {
   return (
