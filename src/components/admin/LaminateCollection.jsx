@@ -73,33 +73,44 @@ const LaminateCollection = () => {
     setVisible(false);
   };
 
-  const writeToDatabaseLaminate = (e) => {
+  const writeToDatabaseLaminate = (link, data) => (e) => {
     e.preventDefault();
-    const uuid = uid();
-    set(ref(db, `/${vendors}/${collection}/collection/${name}`), {
-      name,
-      position,
-      description,
-      advantages,
-      loadClass,
-      thickness,
-      abrasionClass,
-      panelSize,
-      amountPackage,
-      chamfer,
-      lock,
-      waterResistance,
-      warmFloor,
-      warrantyPeriod,
-      country,
-      image,
-      visible,
-      uuid,
+    // const uuid = uid();
+    set(ref(db, link), {
+      ...data,
     });
 
     resetStateLaminate();
     handlers.close();
   };
+
+  // const writeToDatabaseLaminate = (e) => {
+  //   e.preventDefault();
+  //   const uuid = uid();
+  //   set(ref(db, `/${vendors}/${collection}/collection/${name}`), {
+  //     name,
+  //     position,
+  //     description,
+  //     advantages,
+  //     loadClass,
+  //     thickness,
+  //     abrasionClass,
+  //     panelSize,
+  //     amountPackage,
+  //     chamfer,
+  //     lock,
+  //     waterResistance,
+  //     warmFloor,
+  //     warrantyPeriod,
+  //     country,
+  //     image,
+  //     visible,
+  //     uuid,
+  //   });
+
+  //   resetStateLaminate();
+  //   handlers.close();
+  // };
 
   const handleDelete = (item) => {
     remove(ref(db, `/${vendors}/${collection}/collection/${item.name}`));
@@ -172,7 +183,31 @@ const LaminateCollection = () => {
         centered
         title={`Добавить коллекцию ${collection}`}
       >
-        <form onSubmit={writeToDatabaseLaminate}>
+        <form
+          onSubmit={writeToDatabaseLaminate(
+            `/${vendors}/${collection}/collection/${name}`,
+            {
+              name: name,
+              position: position,
+              description: description,
+              advantages: advantages,
+              loadClass: loadClass,
+              thickness: thickness,
+              abrasionClass: abrasionClass,
+              panelSize: panelSize,
+              amountPackage: amountPackage,
+              chamfer: chamfer,
+              lock: lock,
+              waterResistance: waterResistance,
+              warmFloor: warmFloor,
+              warrantyPeriod: warrantyPeriod,
+              country: country,
+              image: image,
+              visible: visible,
+              uuid: uid(),
+            }
+          )}
+        >
           <Grid>
             <Grid.Col md={6}>
               <TextInput
