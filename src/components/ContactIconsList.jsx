@@ -17,13 +17,6 @@ const useStyles = createStyles((theme, { variant }) => ({
 
   icon: {
     marginRight: theme.spacing.md,
-    // backgroundImage:
-    //   variant === "gradient"
-    //     ? `linear-gradient(135deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
-    //         theme.colors[theme.primaryColor][6]
-    //       } 100%)`
-    //     : "none",
-
     backgroundColor: "transparent",
     color: theme.colorScheme === "dark" ? theme.colors.yellow[5] : theme.white
   },

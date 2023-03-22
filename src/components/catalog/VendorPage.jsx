@@ -18,6 +18,7 @@ const VendorPage = () => {
   const [vendorData] = useFetchDataOne(`/${category}/${vendor}`);
   const [collectionData] = useFetchData(`/${category}/${vendor}/collection/`);
   const { name, image, description, advantages } = vendorData;
+  
   return (
     <Container>
       <Group mt="md" position="apart">

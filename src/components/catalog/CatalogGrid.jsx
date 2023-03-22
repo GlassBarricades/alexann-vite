@@ -12,11 +12,17 @@ const CatalogGrid = ({ dataCategory }) => {
     }
   });
 
+  const fileredVendorData = dataVendors.filter((item) => {
+    if (item.visible === false) {
+      return item
+    }
+  })
+
   return (
     <Container>
       <Title mt="md">{title[0].name}</Title>
       <Grid mt="xs">
-        {dataVendors.map((item, index) => {
+        {fileredVendorData.map((item, index) => {
           return (
             <Grid.Col xs={6} sm={4} lg={3} key={index}>
               <Card shadow="sm" padding="xl" component={Link} to={item.name}>

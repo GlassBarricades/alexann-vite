@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Title,
   Button,
@@ -11,26 +11,31 @@ import {
   TextInput,
   Textarea,
   ActionIcon,
+  Checkbox,
+  useMantineColorScheme
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useToggle } from "@mantine/hooks";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase";
 import { uid } from "uid";
 import { set, ref, update, remove } from "firebase/database";
-import { Pencil, Trash } from "tabler-icons-react";
+import { Pencil, Trash, Eye, EyeOff } from "tabler-icons-react";
 
 const AdminLaminate = () => {
+  const colorScheme = useMantineColorScheme();
   const { vendors } = useParams();
   const [opened, { open, close }] = useDisclosure(false);
   const [laminateVendors] = useFetchData(`/${vendors}/`);
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [image, setImage] = useState("");
+  const [visible, setVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [advantages, setAdvantages] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [value, toggle] = useToggle([true, false]);
 
   const handleDelete = (item, base) => {
     remove(ref(db, `/${base}/${item.name}`));
@@ -43,6 +48,7 @@ const AdminLaminate = () => {
       name,
       position,
       image,
+      visible,
       description,
       advantages,
       uuid,
@@ -51,6 +57,7 @@ const AdminLaminate = () => {
     setPosition("");
     setName("");
     setImage("");
+    setVisible(false);
     setDescription("");
     setAdvantages("");
     close();
@@ -60,9 +67,19 @@ const AdminLaminate = () => {
     setPosition(vendor.position);
     setName(vendor.name);
     setImage(vendor.image);
+    setVisible(vendor.visible);
     setDescription(vendor.description);
     setAdvantages(vendor.advantages);
     open();
+  };
+  const handleEditVisible = (vendor) => {
+    toggle();
+    const handleSubmitChangeVisible = () => {
+      update(ref(db, `/${vendors}/${vendor.name}`), {
+        visible: value,
+      });
+    };
+    handleSubmitChangeVisible();
   };
 
   const handleSubmitChange = () => {
@@ -70,6 +87,7 @@ const AdminLaminate = () => {
       name,
       position,
       image,
+      visible,
       description,
       advantages,
     });
@@ -77,6 +95,7 @@ const AdminLaminate = () => {
     setPosition("");
     setName("");
     setImage("");
+    setVisible(false);
     setDescription("");
     setAdvantages("");
     close();
@@ -114,6 +133,15 @@ const AdminLaminate = () => {
             onChange={(e) => setImage(e.target.value)}
             required
           />
+          <Checkbox
+              mt="xs"
+              size="md"
+              label="Скрыть"
+              checked={visible}
+              onChange={(event) =>
+                setVisible(event.currentTarget.checked)
+              }
+            />
           <Textarea
             placeholder="Описание производителя"
             label="Описание производителя"
@@ -166,17 +194,27 @@ const AdminLaminate = () => {
               <Group>
                 <ActionIcon
                   mt="xs"
-                  variant="default"
+                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
                   onClick={() => handleEdit(item)}
+                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
                 >
                   <Pencil size="1rem" />
                 </ActionIcon>
                 <ActionIcon
                   mt="xs"
-                  variant="default"
+                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
                   onClick={() => handleDelete(item, vendors)}
+                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
                 >
                   <Trash size="1rem" />
+                </ActionIcon>
+                <ActionIcon
+                  mt="xs"
+                  variant={colorScheme.colorScheme === "dark" ? "outline" : "default"}
+                  onClick={() => handleEditVisible(item)}
+                  color={colorScheme.colorScheme === "dark" ? "yellow.5" : undefined}
+                >
+                  {item.visible ? <EyeOff size="1rem" /> : <Eye size="1rem" />}
                 </ActionIcon>
               </Group>
             </Grid.Col>
