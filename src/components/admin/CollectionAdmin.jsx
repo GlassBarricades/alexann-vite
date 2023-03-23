@@ -159,7 +159,7 @@ const CollectionAdmin = () => {
                 style={{ minHeight: "305px" }}
               >
                 <Card.Section>
-                  <Image src={item.photo.foto} height={160} alt="No way!" />
+                  <Image src={item.photo.foto} height={160} alt={item.name} />
                 </Card.Section>
 
                 <Text mt="xs" color="dimmed" size="sm">

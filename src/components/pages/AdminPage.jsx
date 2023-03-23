@@ -1,10 +1,10 @@
 import { Button, Navbar, Title, AppShell, Stack } from "@mantine/core";
 import { Route, Routes, Link } from "react-router-dom";
-import AdminLaminate from "../admin/AdminLaminate";
+import AdminVendors from "../admin/AdminVendors";
 import CollectionAdmin from "../admin/CollectionAdmin";
 import ColorAdmin from "../admin/ColorAdmin";
 import LaminateCollection from "../admin/LaminateCollection";
-import { set, ref } from "firebase/database";
+import { set, ref, remove } from "firebase/database";
 import { db } from "../../firebase";
 
 const writeToDatabase = (link, data, reset, close) => (e) => {
@@ -15,6 +15,10 @@ const writeToDatabase = (link, data, reset, close) => (e) => {
 
   reset();
   close();
+};
+
+const handleDelete = (link) => {
+  remove(ref(db, link));
 };
 
 const AdminPage = ({ dataCategory }) => {
@@ -64,10 +68,18 @@ const AdminPage = ({ dataCategory }) => {
         })}
       >
         <Routes>
-          <Route path={"/:vendors"} element={<AdminLaminate writeToDatabase={writeToDatabase}/>} />
+          <Route
+            path={"/:vendors"}
+            element={<AdminVendors writeToDatabase={writeToDatabase} />}
+          />
           <Route
             path={"/:vendors/:collection"}
-            element={<LaminateCollection writeToDatabase={writeToDatabase}/>}
+            element={
+              <LaminateCollection
+                writeToDatabase={writeToDatabase}
+                handleDelete={handleDelete}
+              />
+            }
           />
           <Route
             path={"/:vendors/:collection/:color"}

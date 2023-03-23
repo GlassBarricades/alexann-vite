@@ -30,7 +30,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
   const colorScheme = useMantineColorScheme();
   const { vendors } = useParams();
   const [opened, handlers] = useDisclosure(false, {
-    onClose: () => resetVendors(),
+    onClose: () => resetStateVendors(),
   });
   const [laminateVendors] = useFetchData(`/${vendors}/`);
   const [name, setName] = useState("");
@@ -48,7 +48,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
     remove(ref(db, `/${base}/${item.name}`));
   };
 
-  const resetVendors = () => {
+  const resetStateVendors = () => {
     setPosition(0);
     setName("");
     setImage("");
@@ -87,7 +87,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
       advantages,
     });
 
-    resetVendors();
+    resetStateVendors();
     handlers.close();
     setIsEdit(false);
   };
@@ -114,7 +114,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
               advantages: advantages,
               uuid: uid(),
             },
-            resetVendors,
+            resetStateVendors,
             handlers.close
           )}
         >
@@ -190,7 +190,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
                   />
                 </Card.Section>
 
-                <Group position="apart">
+                <Group position="apart" align="end">
                   <Text weight={500} size="lg" mt="md">
                     {item.name}
                   </Text>

@@ -5,14 +5,10 @@ import {
   Modal,
   Grid,
   Group,
-  Card,
-  Image,
-  Text,
   TextInput,
   Textarea,
+  NumberInput,
   Checkbox,
-  ActionIcon,
-  useMantineColorScheme,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import { useDisclosure, useToggle } from "@mantine/hooks";
@@ -20,22 +16,21 @@ import { db } from "../../firebase";
 import { uid } from "uid";
 import { ref, update, remove } from "firebase/database";
 import useFetchData from "../../hooks/useFetchData";
-import { Link } from "react-router-dom";
-import { Pencil, Trash, Eye, EyeOff } from "tabler-icons-react";
+import useSortData from "../../hooks/useSortData";
+import AdminGridCards from "./AdminGridCards";
 
-const LaminateCollection = ({writeToDatabase}) => {
-  const colorScheme = useMantineColorScheme();
+const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
   const { vendors, collection } = useParams();
   const [opened, handlers] = useDisclosure(false, {
     onClose: () => resetStateLaminate(),
   });
   const [name, setName] = useState("");
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState(0);
   const [vendorCode, setVendorCode] = useState("");
   const [description, setDescription] = useState("");
   const [advantages, setAdvantages] = useState("");
   const [loadClass, setLoadClass] = useState("");
-  const [thickness, setThickness] = useState("");
+  const [thickness, setThickness] = useState(0);
   const [abrasionClass, setAbrasionClass] = useState("");
   const [panelSize, setPanelSize] = useState("");
   const [amountPackage, setAmountPackage] = useState("");
@@ -47,34 +42,44 @@ const LaminateCollection = ({writeToDatabase}) => {
   const [country, setCountry] = useState("");
   const [image, setImage] = useState("");
   const [visible, setVisible] = useState(false);
+  const [patternType, setPatternType] = useState("");
+  const [collectionPrice, setCollectionPrice] = useState(0);
+  const [antistatic, setAntistatic] = useState(false);
+  const [formaldehydeEmissionClass, setFormaldehydeEmissionClass] =
+    useState("");
+  const [europeanNorms, setEuropeanNorms] = useState("");
+  const [boardSurface, setBoardSurface] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [value, toggle] = useToggle([true, false]);
   const [laminateCollection] = useFetchData(
     `/${vendors}/${collection}/collection`
   );
+  const sortedCollection = useSortData(laminateCollection, "position");
 
   const resetStateLaminate = () => {
-    setPosition("");
+    setPosition(0);
     setName("");
     setDescription("");
     setAdvantages("");
     setLoadClass("");
-    setThickness("");
+    setThickness(0);
     setAbrasionClass("");
     setPanelSize("");
     setAmountPackage("");
     setChamfer("");
     setLock("");
-    setWaterResistance("");
-    setWarmFloor("");
+    setWaterResistance(false);
+    setWarmFloor(false);
     setWarrantyPeriod("");
     setCountry("");
     setImage("");
     setVisible(false);
-  };
-
-  const handleDelete = (item) => {
-    remove(ref(db, `/${vendors}/${collection}/collection/${item.name}`));
+    setPatternType("");
+    setCollectionPrice(0);
+    setAntistatic(false);
+    setFormaldehydeEmissionClass("");
+    setEuropeanNorms("");
+    setBoardSurface("");
   };
 
   const handleEditVisible = (vendor) => {
@@ -106,6 +111,12 @@ const LaminateCollection = ({writeToDatabase}) => {
       country,
       image,
       visible,
+      patternType,
+      collectionPrice,
+      antistatic,
+      formaldehydeEmissionClass,
+      europeanNorms,
+      boardSurface,
     });
 
     resetStateLaminate();
@@ -131,6 +142,12 @@ const LaminateCollection = ({writeToDatabase}) => {
     setCountry(vendor.country);
     setImage(vendor.image);
     setVisible(vendor.visible);
+    setPatternType(vendor.patternType);
+    setCollectionPrice(vendor.collectionPrice);
+    setAntistatic(vendor.antistatic);
+    setFormaldehydeEmissionClass(vendor.formaldehydeEmissionClass);
+    setEuropeanNorms(vendor.europeanNorms);
+    setBoardSurface(vendor.boardSurface);
     handlers.open();
   };
 
@@ -164,6 +181,12 @@ const LaminateCollection = ({writeToDatabase}) => {
               country: country,
               image: image,
               visible: visible,
+              patternType: patternType,
+              collectionPrice: collectionPrice,
+              antistatic: antistatic,
+              formaldehydeEmissionClass: formaldehydeEmissionClass,
+              europeanNorms: europeanNorms,
+              boardSurface: boardSurface,
               uuid: uid(),
             },
             resetStateLaminate,
@@ -172,12 +195,11 @@ const LaminateCollection = ({writeToDatabase}) => {
         >
           <Grid>
             <Grid.Col md={6}>
-              <TextInput
-                label="Позиция в каталоге"
+              <NumberInput
                 placeholder="Позиция в каталоге"
+                label="Позиция в каталоге"
                 value={position}
-                onChange={(e) => setPosition(e.target.value)}
-                required
+                onChange={setPosition}
               />
               <TextInput
                 label="Название"
@@ -186,11 +208,35 @@ const LaminateCollection = ({writeToDatabase}) => {
                 onChange={(e) => setName(e.target.value)}
                 required
               />
+              <NumberInput
+                placeholder="Цена"
+                label="Цена"
+                value={collectionPrice}
+                onChange={setCollectionPrice}
+              />
               <TextInput
                 label="Артикул"
                 placeholder="Артикул"
                 value={vendorCode}
                 onChange={(e) => setVendorCode(e.target.value)}
+              />
+              <TextInput
+                label="Соответствие европейским нормам"
+                placeholder="Соответствие европейским нормам"
+                value={europeanNorms}
+                onChange={(e) => setEuropeanNorms(e.target.value)}
+              />
+              <TextInput
+                label="Поверхность доски"
+                placeholder="Поверхность доски"
+                value={boardSurface}
+                onChange={(e) => setBoardSurface(e.target.value)}
+              />
+              <TextInput
+                label="Класс эмиссии формальдегида"
+                placeholder="Класс эмиссии формальдегида"
+                value={formaldehydeEmissionClass}
+                onChange={(e) => setFormaldehydeEmissionClass(e.target.value)}
               />
               <Textarea
                 placeholder="Описание коллекции"
@@ -217,16 +263,22 @@ const LaminateCollection = ({writeToDatabase}) => {
                 onChange={(e) => setLoadClass(e.target.value)}
               />
               <TextInput
-                label="Толщина"
-                placeholder="Толщина"
-                value={thickness}
-                onChange={(e) => setThickness(e.target.value)}
-              />
-              <TextInput
                 label="Класс истирания"
                 placeholder="Класс истирания"
                 value={abrasionClass}
                 onChange={(e) => setAbrasionClass(e.target.value)}
+              />
+              <TextInput
+                label="Тип рисунка"
+                placeholder="Тип рисунка"
+                value={patternType}
+                onChange={(e) => setPatternType(e.target.value)}
+              />
+              <NumberInput
+                placeholder="Толщина"
+                label="Толщина"
+                value={thickness}
+                onChange={setThickness}
               />
               <TextInput
                 label="Размер панели"
@@ -270,7 +322,14 @@ const LaminateCollection = ({writeToDatabase}) => {
                   }
                 />
                 <Checkbox
-                  mt="xs"
+                  size="md"
+                  label="Антистатик"
+                  checked={antistatic}
+                  onChange={(event) =>
+                    setAntistatic(event.currentTarget.checked)
+                  }
+                />
+                <Checkbox
                   size="md"
                   label="Скрыть"
                   checked={visible}
@@ -312,61 +371,14 @@ const LaminateCollection = ({writeToDatabase}) => {
           Добавить коллекцию
         </Button>
       </Group>
-      <Grid mt="lg">
-        {laminateCollection.map((item, index) => {
-          return (
-            <Grid.Col sm={6} xs={12} md={4} lg={3} xl={2} key={index}>
-              <Card shadow="sm" padding="xl" component={Link} to={item.name}>
-                <Card.Section>
-                  <Image src={item.image} height={160} alt={item.name} />
-                </Card.Section>
-
-                <Text weight={500} size="lg" mt="md">
-                  {item.name}
-                </Text>
-              </Card>
-              <Group>
-                <ActionIcon
-                  mt="xs"
-                  variant={
-                    colorScheme.colorScheme === "dark" ? "outline" : "default"
-                  }
-                  onClick={() => handleEditLaminate(item)}
-                  color={
-                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
-                  }
-                >
-                  <Pencil size="1rem" />
-                </ActionIcon>
-                <ActionIcon
-                  mt="xs"
-                  variant={
-                    colorScheme.colorScheme === "dark" ? "outline" : "default"
-                  }
-                  onClick={() => handleDelete(item)}
-                  color={
-                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
-                  }
-                >
-                  <Trash size="1rem" />
-                </ActionIcon>
-                <ActionIcon
-                  mt="xs"
-                  variant={
-                    colorScheme.colorScheme === "dark" ? "outline" : "default"
-                  }
-                  onClick={() => handleEditVisible(item)}
-                  color={
-                    colorScheme.colorScheme === "dark" ? "yellow.5" : undefined
-                  }
-                >
-                  {item.visible ? <EyeOff size="1rem" /> : <Eye size="1rem" />}
-                </ActionIcon>
-              </Group>
-            </Grid.Col>
-          );
-        })}
-      </Grid>
+      <AdminGridCards
+        data={sortedCollection}
+        editHandler={handleEditLaminate}
+        deleteHandler={handleDelete}
+        visibleHandler={handleEditVisible}
+        vendors={vendors}
+        collection={collection}
+      />
     </>
   );
 };
