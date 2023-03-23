@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Title,
   Button,
@@ -8,8 +8,10 @@ import {
   Image,
   Grid,
   Group,
+  Badge,
   TextInput,
   Textarea,
+  NumberInput,
   ActionIcon,
   Checkbox,
   useMantineColorScheme,
@@ -20,16 +22,19 @@ import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase";
 import { uid } from "uid";
-import { set, ref, update, remove } from "firebase/database";
+import { ref, update, remove } from "firebase/database";
 import { Pencil, Trash, Eye, EyeOff } from "tabler-icons-react";
+import useSortData from "../../hooks/useSortData";
 
-const AdminLaminate = () => {
+const AdminLaminate = ({ writeToDatabase }) => {
   const colorScheme = useMantineColorScheme();
   const { vendors } = useParams();
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, handlers] = useDisclosure(false, {
+    onClose: () => resetVendors(),
+  });
   const [laminateVendors] = useFetchData(`/${vendors}/`);
   const [name, setName] = useState("");
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState(0);
   const [image, setImage] = useState("");
   const [visible, setVisible] = useState(false);
   const [description, setDescription] = useState("");
@@ -37,31 +42,21 @@ const AdminLaminate = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [value, toggle] = useToggle([true, false]);
 
+  const vendorsSorted = useSortData(laminateVendors, "position");
+
   const handleDelete = (item, base) => {
     remove(ref(db, `/${base}/${item.name}`));
   };
 
-  const writeToDatabase = (e) => {
-    e.preventDefault();
-    const uuid = uid();
-    set(ref(db, `/${vendors}/${name}`), {
-      name,
-      position,
-      image,
-      visible,
-      description,
-      advantages,
-      uuid,
-    });
-
-    setPosition("");
+  const resetVendors = () => {
+    setPosition(0);
     setName("");
     setImage("");
     setVisible(false);
     setDescription("");
     setAdvantages("");
-    close();
   };
+
   const handleEdit = (vendor) => {
     setIsEdit(true);
     setPosition(vendor.position);
@@ -70,7 +65,7 @@ const AdminLaminate = () => {
     setVisible(vendor.visible);
     setDescription(vendor.description);
     setAdvantages(vendor.advantages);
-    open();
+    handlers.open();
   };
   const handleEditVisible = (vendor) => {
     toggle();
@@ -92,13 +87,8 @@ const AdminLaminate = () => {
       advantages,
     });
 
-    setPosition("");
-    setName("");
-    setImage("");
-    setVisible(false);
-    setDescription("");
-    setAdvantages("");
-    close();
+    resetVendors();
+    handlers.close();
     setIsEdit(false);
   };
 
@@ -106,18 +96,33 @@ const AdminLaminate = () => {
     <>
       <Modal
         opened={opened}
-        onClose={close}
+        onClose={handlers.close}
         size="xl"
         centered
         title="Добавление производителя"
       >
-        <form id="driver-form" onSubmit={writeToDatabase}>
-          <TextInput
-            label="Позиция в каталоге"
+        <form
+          id="driver-form"
+          onSubmit={writeToDatabase(
+            `/${vendors}/${name}`,
+            {
+              name: name,
+              position: position,
+              image: image,
+              visible: visible,
+              description: description,
+              advantages: advantages,
+              uuid: uid(),
+            },
+            resetVendors,
+            handlers.close
+          )}
+        >
+          <NumberInput
             placeholder="Позиция в каталоге"
+            label="Позиция в каталоге"
             value={position}
-            onChange={(e) => setPosition(e.target.value)}
-            required
+            onChange={setPosition}
           />
           <TextInput
             label="Название"
@@ -167,12 +172,12 @@ const AdminLaminate = () => {
       </Modal>
       <Group position="apart">
         <Title order={2}>Производители</Title>
-        <Button onClick={open} variant="default">
+        <Button onClick={handlers.open} variant="default">
           Добавить производителя
         </Button>
       </Group>
       <Grid mt="lg">
-        {laminateVendors.map((item, index) => {
+        {vendorsSorted.map((item, index) => {
           return (
             <Grid.Col sm={6} xs={12} md={4} lg={3} xl={2} key={index}>
               <Card shadow="sm" padding="xl" component={Link} to={item.name}>
@@ -185,9 +190,20 @@ const AdminLaminate = () => {
                   />
                 </Card.Section>
 
-                <Text weight={500} size="lg" mt="md">
-                  {item.name}
-                </Text>
+                <Group position="apart">
+                  <Text weight={500} size="lg" mt="md">
+                    {item.name}
+                  </Text>
+                  <Badge
+                    color={
+                      colorScheme.colorScheme === "dark" ? "yellow.5" : "dark"
+                    }
+                    variant="outline"
+                    align="center"
+                  >
+                    {item.position}
+                  </Badge>
+                </Group>
               </Card>
               <Group>
                 <ActionIcon

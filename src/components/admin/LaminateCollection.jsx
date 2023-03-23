@@ -18,12 +18,12 @@ import { useParams } from "react-router-dom";
 import { useDisclosure, useToggle } from "@mantine/hooks";
 import { db } from "../../firebase";
 import { uid } from "uid";
-import { set, ref, update, remove } from "firebase/database";
+import { ref, update, remove } from "firebase/database";
 import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
 import { Pencil, Trash, Eye, EyeOff } from "tabler-icons-react";
 
-const LaminateCollection = () => {
+const LaminateCollection = ({writeToDatabase}) => {
   const colorScheme = useMantineColorScheme();
   const { vendors, collection } = useParams();
   const [opened, handlers] = useDisclosure(false, {
@@ -73,45 +73,6 @@ const LaminateCollection = () => {
     setVisible(false);
   };
 
-  const writeToDatabaseLaminate = (link, data) => (e) => {
-    e.preventDefault();
-    // const uuid = uid();
-    set(ref(db, link), {
-      ...data,
-    });
-
-    resetStateLaminate();
-    handlers.close();
-  };
-
-  // const writeToDatabaseLaminate = (e) => {
-  //   e.preventDefault();
-  //   const uuid = uid();
-  //   set(ref(db, `/${vendors}/${collection}/collection/${name}`), {
-  //     name,
-  //     position,
-  //     description,
-  //     advantages,
-  //     loadClass,
-  //     thickness,
-  //     abrasionClass,
-  //     panelSize,
-  //     amountPackage,
-  //     chamfer,
-  //     lock,
-  //     waterResistance,
-  //     warmFloor,
-  //     warrantyPeriod,
-  //     country,
-  //     image,
-  //     visible,
-  //     uuid,
-  //   });
-
-  //   resetStateLaminate();
-  //   handlers.close();
-  // };
-
   const handleDelete = (item) => {
     remove(ref(db, `/${vendors}/${collection}/collection/${item.name}`));
   };
@@ -153,7 +114,6 @@ const LaminateCollection = () => {
   };
   const handleEditLaminate = (vendor) => {
     setIsEdit(true);
-
     setPosition(vendor.position);
     setName(vendor.name);
     setDescription(vendor.description);
@@ -184,7 +144,7 @@ const LaminateCollection = () => {
         title={`Добавить коллекцию ${collection}`}
       >
         <form
-          onSubmit={writeToDatabaseLaminate(
+          onSubmit={writeToDatabase(
             `/${vendors}/${collection}/collection/${name}`,
             {
               name: name,
@@ -205,7 +165,9 @@ const LaminateCollection = () => {
               image: image,
               visible: visible,
               uuid: uid(),
-            }
+            },
+            resetStateLaminate,
+            handlers.close
           )}
         >
           <Grid>

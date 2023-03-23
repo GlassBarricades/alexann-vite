@@ -4,6 +4,18 @@ import AdminLaminate from "../admin/AdminLaminate";
 import CollectionAdmin from "../admin/CollectionAdmin";
 import ColorAdmin from "../admin/ColorAdmin";
 import LaminateCollection from "../admin/LaminateCollection";
+import { set, ref } from "firebase/database";
+import { db } from "../../firebase";
+
+const writeToDatabase = (link, data, reset, close) => (e) => {
+  e.preventDefault();
+  set(ref(db, link), {
+    ...data,
+  });
+
+  reset();
+  close();
+};
 
 const AdminPage = ({ dataCategory }) => {
   return (
@@ -52,10 +64,10 @@ const AdminPage = ({ dataCategory }) => {
         })}
       >
         <Routes>
-          <Route path={"/:vendors"} element={<AdminLaminate />} />
+          <Route path={"/:vendors"} element={<AdminLaminate writeToDatabase={writeToDatabase}/>} />
           <Route
             path={"/:vendors/:collection"}
-            element={<LaminateCollection />}
+            element={<LaminateCollection writeToDatabase={writeToDatabase}/>}
           />
           <Route
             path={"/:vendors/:collection/:color"}
