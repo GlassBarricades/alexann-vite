@@ -368,11 +368,12 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
                 value={basis}
                 onChange={(e) => setBasis(e.target.value)}
               />
-              <TextInput
+              <NumberInput
+                precision={2}
                 label="Толщина защитного слоя"
                 placeholder="Толщина защитного слоя"
                 value={protectiveLayerThickness}
-                onChange={(e) => setProtectiveLayerThickness(e.target.value)}
+                onChange={setProtectiveLayerThickness}
               />
               {vendors === "laminate" ? (
                 <>
@@ -416,6 +417,7 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
                 onChange={(e) => setPatternType(e.target.value)}
               />
               <NumberInput
+                precision={2}
                 placeholder="Толщина"
                 label="Толщина"
                 value={thickness}
