@@ -104,18 +104,6 @@ const AdminLinoleumCollectionForm = ({ collection, close }) => {
             onChange={(e) => setThickness(e.target.value)}
           />
           <TextInput
-            label="Основа"
-            placeholder="Основа"
-            value={basis}
-            onChange={(e) => setBasis(e.target.value)}
-          />
-          <TextInput
-            label="Толщина защитного слоя"
-            placeholder="Толщина защитного слоя"
-            value={protectiveLayerThickness}
-            onChange={(e) => setProtectiveLayerThickness(e.target.value)}
-          />
-          <TextInput
             label="Гарантийный срок службы"
             placeholder="Гарантийный срок службы"
             value={warrantyPeriod}

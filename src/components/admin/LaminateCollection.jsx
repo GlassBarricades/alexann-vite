@@ -22,7 +22,7 @@ import AdminGridCards from "./AdminGridCards";
 const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
   const { vendors, collection } = useParams();
   const [opened, handlers] = useDisclosure(false, {
-    onClose: () => resetStateLaminate(),
+    onClose: () => resetState(),
   });
   const [name, setName] = useState("");
   const [position, setPosition] = useState(0);
@@ -31,24 +31,34 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
   const [advantages, setAdvantages] = useState("");
   const [loadClass, setLoadClass] = useState("");
   const [thickness, setThickness] = useState(0);
+
+  const [basis, setBasis] = useState("");
+  const [protectiveLayerThickness, setProtectiveLayerThickness] = useState("");
+
   const [abrasionClass, setAbrasionClass] = useState("");
   const [panelSize, setPanelSize] = useState("");
   const [amountPackage, setAmountPackage] = useState("");
   const [chamfer, setChamfer] = useState("");
   const [lock, setLock] = useState("");
   const [waterResistance, setWaterResistance] = useState(false);
+
   const [warmFloor, setWarmFloor] = useState(false);
+
   const [warrantyPeriod, setWarrantyPeriod] = useState("");
   const [country, setCountry] = useState("");
   const [image, setImage] = useState("");
   const [visible, setVisible] = useState(false);
+
   const [patternType, setPatternType] = useState("");
+
   const [collectionPrice, setCollectionPrice] = useState(0);
+
   const [antistatic, setAntistatic] = useState(false);
   const [formaldehydeEmissionClass, setFormaldehydeEmissionClass] =
     useState("");
   const [europeanNorms, setEuropeanNorms] = useState("");
   const [boardSurface, setBoardSurface] = useState("");
+
   const [isEdit, setIsEdit] = useState(false);
   const [value, toggle] = useToggle([true, false]);
   const [laminateCollection] = useFetchData(
@@ -56,30 +66,48 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
   );
   const sortedCollection = useSortData(laminateCollection, "position");
 
-  const resetStateLaminate = () => {
-    setPosition(0);
-    setName("");
-    setDescription("");
-    setAdvantages("");
-    setLoadClass("");
-    setThickness(0);
-    setAbrasionClass("");
-    setPanelSize("");
-    setAmountPackage("");
-    setChamfer("");
-    setLock("");
-    setWaterResistance(false);
-    setWarmFloor(false);
-    setWarrantyPeriod("");
-    setCountry("");
-    setImage("");
-    setVisible(false);
-    setPatternType("");
-    setCollectionPrice(0);
-    setAntistatic(false);
-    setFormaldehydeEmissionClass("");
-    setEuropeanNorms("");
-    setBoardSurface("");
+  const resetState = () => {
+    if (vendors === "laminate") {
+      setPosition(0);
+      setName("");
+      setDescription("");
+      setAdvantages("");
+      setLoadClass("");
+      setThickness(0);
+      setAbrasionClass("");
+      setPanelSize("");
+      setAmountPackage("");
+      setChamfer("");
+      setLock("");
+      setWaterResistance(false);
+      setWarmFloor(false);
+      setWarrantyPeriod("");
+      setCountry("");
+      setImage("");
+      setVisible(false);
+      setPatternType("");
+      setCollectionPrice(0);
+      setAntistatic(false);
+      setFormaldehydeEmissionClass("");
+      setEuropeanNorms("");
+      setBoardSurface("");
+    } else if (vendors === "linoleum") {
+      setPosition(0);
+      setName("");
+      setDescription("");
+      setAdvantages("");
+      setLoadClass("");
+      setThickness(0);
+      setBasis("");
+      setProtectiveLayerThickness("");
+      setWarmFloor(false);
+      setWarrantyPeriod("");
+      setCountry("");
+      setImage("");
+      setVisible(false);
+      setPatternType("");
+      setCollectionPrice(0);
+    }
   };
 
   const handleEditVisible = (vendor) => {
@@ -93,62 +121,102 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
   };
 
   const handleSubmitChangeLaminate = () => {
-    update(ref(db, `/${vendors}/${collection}/collection/${name}`), {
-      name,
-      position,
-      description,
-      advantages,
-      loadClass,
-      thickness,
-      abrasionClass,
-      panelSize,
-      amountPackage,
-      chamfer,
-      lock,
-      waterResistance,
-      warmFloor,
-      warrantyPeriod,
-      country,
-      image,
-      visible,
-      patternType,
-      collectionPrice,
-      antistatic,
-      formaldehydeEmissionClass,
-      europeanNorms,
-      boardSurface,
-    });
+    if (vendors === "laminate") {
+      update(ref(db, `/${vendors}/${collection}/collection/${name}`), {
+        name,
+        position,
+        description,
+        advantages,
+        loadClass,
+        thickness,
+        abrasionClass,
+        panelSize,
+        amountPackage,
+        chamfer,
+        lock,
+        waterResistance,
+        warmFloor,
+        warrantyPeriod,
+        country,
+        image,
+        visible,
+        patternType,
+        collectionPrice,
+        antistatic,
+        formaldehydeEmissionClass,
+        europeanNorms,
+        boardSurface,
+      });
 
-    resetStateLaminate();
-    handlers.close();
-    setIsEdit(false);
+      resetState();
+      handlers.close();
+      setIsEdit(false);
+    } else if (vendors === "linoleum") {
+      update(ref(db, `/${vendors}/${collection}/collection/${name}`), {
+        name,
+        position,
+        description,
+        advantages,
+        loadClass,
+        thickness,
+        warmFloor,
+        warrantyPeriod,
+        country,
+        image,
+        visible,
+        patternType,
+        collectionPrice,
+      });
+
+      resetState();
+      handlers.close();
+      setIsEdit(false);
+    }
   };
   const handleEditLaminate = (vendor) => {
-    setIsEdit(true);
-    setPosition(vendor.position);
-    setName(vendor.name);
-    setDescription(vendor.description);
-    setAdvantages(vendor.advantages);
-    setLoadClass(vendor.loadClass);
-    setThickness(vendor.thickness);
-    setAbrasionClass(vendor.abrasionClass);
-    setPanelSize(vendor.panelSize);
-    setAmountPackage(vendor.amountPackage);
-    setChamfer(vendor.chamfer);
-    setLock(vendor.lock);
-    setWaterResistance(vendor.waterResistance);
-    setWarmFloor(vendor.warmFloor);
-    setWarrantyPeriod(vendor.warrantyPeriod);
-    setCountry(vendor.country);
-    setImage(vendor.image);
-    setVisible(vendor.visible);
-    setPatternType(vendor.patternType);
-    setCollectionPrice(vendor.collectionPrice);
-    setAntistatic(vendor.antistatic);
-    setFormaldehydeEmissionClass(vendor.formaldehydeEmissionClass);
-    setEuropeanNorms(vendor.europeanNorms);
-    setBoardSurface(vendor.boardSurface);
-    handlers.open();
+    if (vendors === "laminate") {
+      setIsEdit(true);
+      setPosition(vendor.position);
+      setName(vendor.name);
+      setDescription(vendor.description);
+      setAdvantages(vendor.advantages);
+      setLoadClass(vendor.loadClass);
+      setThickness(vendor.thickness);
+      setAbrasionClass(vendor.abrasionClass);
+      setPanelSize(vendor.panelSize);
+      setAmountPackage(vendor.amountPackage);
+      setChamfer(vendor.chamfer);
+      setLock(vendor.lock);
+      setWaterResistance(vendor.waterResistance);
+      setWarmFloor(vendor.warmFloor);
+      setWarrantyPeriod(vendor.warrantyPeriod);
+      setCountry(vendor.country);
+      setImage(vendor.image);
+      setVisible(vendor.visible);
+      setPatternType(vendor.patternType);
+      setCollectionPrice(vendor.collectionPrice);
+      setAntistatic(vendor.antistatic);
+      setFormaldehydeEmissionClass(vendor.formaldehydeEmissionClass);
+      setEuropeanNorms(vendor.europeanNorms);
+      setBoardSurface(vendor.boardSurface);
+      handlers.open();
+    } else if (vendors === "linoleum") {
+      setIsEdit(true);
+      setPosition(vendor.position);
+      setName(vendor.name);
+      setDescription(vendor.description);
+      setAdvantages(vendor.advantages);
+      setLoadClass(vendor.loadClass);
+      setThickness(vendor.thickness);
+      setWarmFloor(vendor.warmFloor);
+      setWarrantyPeriod(vendor.warrantyPeriod);
+      setCountry(vendor.country);
+      setImage(vendor.image);
+      setVisible(vendor.visible);
+      setPatternType(vendor.patternType);
+      setCollectionPrice(vendor.collectionPrice);
+      handlers.open();
+    }
   };
 
   return (
@@ -161,37 +229,63 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
         title={`Добавить коллекцию ${collection}`}
       >
         <form
-          onSubmit={writeToDatabase(
-            `/${vendors}/${collection}/collection/${name}`,
-            {
-              name: name,
-              position: position,
-              description: description,
-              advantages: advantages,
-              loadClass: loadClass,
-              thickness: thickness,
-              abrasionClass: abrasionClass,
-              panelSize: panelSize,
-              amountPackage: amountPackage,
-              chamfer: chamfer,
-              lock: lock,
-              waterResistance: waterResistance,
-              warmFloor: warmFloor,
-              warrantyPeriod: warrantyPeriod,
-              country: country,
-              image: image,
-              visible: visible,
-              patternType: patternType,
-              collectionPrice: collectionPrice,
-              antistatic: antistatic,
-              formaldehydeEmissionClass: formaldehydeEmissionClass,
-              europeanNorms: europeanNorms,
-              boardSurface: boardSurface,
-              uuid: uid(),
-            },
-            resetStateLaminate,
-            handlers.close
-          )}
+          onSubmit={
+            vendors === "laminate"
+              ? writeToDatabase(
+                  `/${vendors}/${collection}/collection/${name}`,
+                  {
+                    name: name,
+                    position: position,
+                    description: description,
+                    advantages: advantages,
+                    loadClass: loadClass,
+                    thickness: thickness,
+                    abrasionClass: abrasionClass,
+                    panelSize: panelSize,
+                    amountPackage: amountPackage,
+                    chamfer: chamfer,
+                    lock: lock,
+                    waterResistance: waterResistance,
+                    warmFloor: warmFloor,
+                    warrantyPeriod: warrantyPeriod,
+                    country: country,
+                    image: image,
+                    visible: visible,
+                    patternType: patternType,
+                    collectionPrice: collectionPrice,
+                    antistatic: antistatic,
+                    formaldehydeEmissionClass: formaldehydeEmissionClass,
+                    europeanNorms: europeanNorms,
+                    boardSurface: boardSurface,
+                    uuid: uid(),
+                  },
+                  resetState,
+                  handlers.close
+                )
+              : writeToDatabase(
+                  `/${vendors}/${collection}/collection/${name}`,
+                  {
+                    name: name,
+                    position: position,
+                    description: description,
+                    advantages: advantages,
+                    loadClass: loadClass,
+                    thickness: thickness,
+                    warmFloor: warmFloor,
+                    basis: basis,
+                    protectiveLayerThickness: protectiveLayerThickness,
+                    warrantyPeriod: warrantyPeriod,
+                    country: country,
+                    image: image,
+                    visible: visible,
+                    patternType: patternType,
+                    collectionPrice: collectionPrice,
+                    uuid: uid(),
+                  },
+                  resetState,
+                  handlers.close
+                )
+          }
         >
           <Grid>
             <Grid.Col md={6}>
@@ -220,24 +314,30 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
                 value={vendorCode}
                 onChange={(e) => setVendorCode(e.target.value)}
               />
-              <TextInput
-                label="Соответствие европейским нормам"
-                placeholder="Соответствие европейским нормам"
-                value={europeanNorms}
-                onChange={(e) => setEuropeanNorms(e.target.value)}
-              />
-              <TextInput
-                label="Поверхность доски"
-                placeholder="Поверхность доски"
-                value={boardSurface}
-                onChange={(e) => setBoardSurface(e.target.value)}
-              />
-              <TextInput
-                label="Класс эмиссии формальдегида"
-                placeholder="Класс эмиссии формальдегида"
-                value={formaldehydeEmissionClass}
-                onChange={(e) => setFormaldehydeEmissionClass(e.target.value)}
-              />
+              {vendors === "laminate" ? (
+                <>
+                  <TextInput
+                    label="Соответствие европейским нормам"
+                    placeholder="Соответствие европейским нормам"
+                    value={europeanNorms}
+                    onChange={(e) => setEuropeanNorms(e.target.value)}
+                  />
+                  <TextInput
+                    label="Поверхность доски"
+                    placeholder="Поверхность доски"
+                    value={boardSurface}
+                    onChange={(e) => setBoardSurface(e.target.value)}
+                  />
+                  <TextInput
+                    label="Класс эмиссии формальдегида"
+                    placeholder="Класс эмиссии формальдегида"
+                    value={formaldehydeEmissionClass}
+                    onChange={(e) =>
+                      setFormaldehydeEmissionClass(e.target.value)
+                    }
+                  />
+                </>
+              ) : undefined}
               <Textarea
                 placeholder="Описание коллекции"
                 label="Описание коллекции"
@@ -263,11 +363,52 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
                 onChange={(e) => setLoadClass(e.target.value)}
               />
               <TextInput
-                label="Класс истирания"
-                placeholder="Класс истирания"
-                value={abrasionClass}
-                onChange={(e) => setAbrasionClass(e.target.value)}
+                label="Основа"
+                placeholder="Основа"
+                value={basis}
+                onChange={(e) => setBasis(e.target.value)}
               />
+              <TextInput
+                label="Толщина защитного слоя"
+                placeholder="Толщина защитного слоя"
+                value={protectiveLayerThickness}
+                onChange={(e) => setProtectiveLayerThickness(e.target.value)}
+              />
+              {vendors === "laminate" ? (
+                <>
+                  <TextInput
+                    label="Класс истирания"
+                    placeholder="Класс истирания"
+                    value={abrasionClass}
+                    onChange={(e) => setAbrasionClass(e.target.value)}
+                  />
+                  <TextInput
+                    label="Размер панели"
+                    placeholder="Размер панели"
+                    value={panelSize}
+                    onChange={(e) => setPanelSize(e.target.value)}
+                  />
+                  <TextInput
+                    label="Количество в упаковке"
+                    placeholder="Количество в упаковке"
+                    value={amountPackage}
+                    onChange={(e) => setAmountPackage(e.target.value)}
+                  />
+                  <TextInput
+                    label="Фаска"
+                    placeholder="Фаска"
+                    value={chamfer}
+                    onChange={(e) => setChamfer(e.target.value)}
+                  />
+                  <TextInput
+                    label="Замок"
+                    placeholder="Замок"
+                    value={lock}
+                    onChange={(e) => setLock(e.target.value)}
+                  />
+                </>
+              ) : undefined}
+
               <TextInput
                 label="Тип рисунка"
                 placeholder="Тип рисунка"
@@ -280,53 +421,33 @@ const LaminateCollection = ({ writeToDatabase, handleDelete }) => {
                 value={thickness}
                 onChange={setThickness}
               />
-              <TextInput
-                label="Размер панели"
-                placeholder="Размер панели"
-                value={panelSize}
-                onChange={(e) => setPanelSize(e.target.value)}
-              />
-              <TextInput
-                label="Количество в упаковке"
-                placeholder="Количество в упаковке"
-                value={amountPackage}
-                onChange={(e) => setAmountPackage(e.target.value)}
-              />
-              <TextInput
-                label="Фаска"
-                placeholder="Фаска"
-                value={chamfer}
-                onChange={(e) => setChamfer(e.target.value)}
-              />
-              <TextInput
-                label="Замок"
-                placeholder="Замок"
-                value={lock}
-                onChange={(e) => setLock(e.target.value)}
-              />
               <Group mt="sm">
-                <Checkbox
-                  size="md"
-                  label="Водостойкость"
-                  checked={waterResistance}
-                  onChange={(event) =>
-                    setWaterResistance(event.currentTarget.checked)
-                  }
-                />
+                {vendors === "laminate" ? (
+                  <>
+                    <Checkbox
+                      size="md"
+                      label="Водостойкость"
+                      checked={waterResistance}
+                      onChange={(event) =>
+                        setWaterResistance(event.currentTarget.checked)
+                      }
+                    />
+                    <Checkbox
+                      size="md"
+                      label="Антистатик"
+                      checked={antistatic}
+                      onChange={(event) =>
+                        setAntistatic(event.currentTarget.checked)
+                      }
+                    />
+                  </>
+                ) : undefined}
                 <Checkbox
                   size="md"
                   label="Совместимость с теплым полом"
                   checked={warmFloor}
                   onChange={(event) =>
                     setWarmFloor(event.currentTarget.checked)
-                  }
-                />
-                <Checkbox
-                  size="md"
-                  label="Антистатик"
-                  checked={antistatic}
-                  onChange={(event) =>
-                    setAntistatic(event.currentTarget.checked)
                   }
                 />
                 <Checkbox
