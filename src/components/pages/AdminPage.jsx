@@ -3,7 +3,8 @@ import { Route, Routes, Link } from "react-router-dom";
 import AdminVendors from "../admin/AdminVendors";
 import CollectionAdmin from "../admin/CollectionAdmin";
 import ColorAdmin from "../admin/ColorAdmin";
-import LaminateCollection from "../admin/LaminateCollection";
+import AdminLaminateCollections from "../admin/AdminLaminateCollections";
+import AdminLinoleumCollections from "../admin/AdminLinoleumCollections";
 import { set, ref, remove } from "firebase/database";
 import { db } from "../../firebase";
 
@@ -73,9 +74,18 @@ const AdminPage = ({ dataCategory }) => {
             element={<AdminVendors writeToDatabase={writeToDatabase} />}
           />
           <Route
-            path={"/:vendors/:collection"}
+            path={"/linoleum/:collection"}
             element={
-              <LaminateCollection
+              <AdminLinoleumCollections
+                writeToDatabase={writeToDatabase}
+                handleDelete={handleDelete}
+              />
+            }
+          />
+          <Route
+            path={"/laminate/:collection"}
+            element={
+              <AdminLaminateCollections
                 writeToDatabase={writeToDatabase}
                 handleDelete={handleDelete}
               />
