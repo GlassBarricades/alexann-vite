@@ -5,6 +5,7 @@ import CollectionAdmin from "../admin/CollectionAdmin";
 import ColorAdmin from "../admin/ColorAdmin";
 import AdminLaminateCollections from "../admin/AdminLaminateCollections";
 import AdminLinoleumCollections from "../admin/AdminLinoleumCollections";
+import AdminVinylFlooringCollections from "../admin/AdminVinylFlooringCollections";
 import { set, ref, remove } from "firebase/database";
 import { db } from "../../firebase";
 
@@ -86,6 +87,15 @@ const AdminPage = ({ dataCategory }) => {
             path={"/laminate/:collection"}
             element={
               <AdminLaminateCollections
+                writeToDatabase={writeToDatabase}
+                handleDelete={handleDelete}
+              />
+            }
+          />
+          <Route
+            path={"/vinyl-flooring/:collection"}
+            element={
+              <AdminVinylFlooringCollections
                 writeToDatabase={writeToDatabase}
                 handleDelete={handleDelete}
               />

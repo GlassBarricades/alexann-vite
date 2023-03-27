@@ -18,7 +18,7 @@ import useSortData from "../../hooks/useSortData";
 import AdminCollectionContainer from "./AdminCollectionContainer";
 
 const AdminLaminateCollections = ({ writeToDatabase, handleDelete }) => {
-  const { vendors, collection } = useParams();
+  const { collection } = useParams();
   const [opened, handlers] = useDisclosure(false, {
     onClose: () => resetState(),
   });
@@ -156,9 +156,11 @@ const AdminLaminateCollections = ({ writeToDatabase, handleDelete }) => {
         editHandler={handleEditLaminate}
         deleteHandler={handleDelete}
         visibleHandler={handleEditVisible}
-        resetState={resetState}
         vendors={"laminate"}
         collection={collection}
+        opened={opened}
+        close={handlers.close}
+        open={handlers.open}
       >
         <form
           onSubmit={writeToDatabase(

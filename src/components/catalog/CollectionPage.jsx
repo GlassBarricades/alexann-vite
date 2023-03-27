@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 
 const CollectionPage = () => {
   const { collection, category, vendor } = useParams();
-  const [opened, { open, close }] = useDisclosure(false);
   const [collectionData] = useFetchDataOne(
     `/${category}/${vendor}/collection/${collection}`
   );

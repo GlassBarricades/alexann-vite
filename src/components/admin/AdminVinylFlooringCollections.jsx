@@ -17,7 +17,7 @@ import useFetchData from "../../hooks/useFetchData";
 import useSortData from "../../hooks/useSortData";
 import AdminCollectionContainer from "./AdminCollectionContainer";
 
-const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
+const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
   const { collection } = useParams();
   const [opened, handlers] = useDisclosure(false, {
     onClose: () => resetState(),
@@ -29,21 +29,21 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
   const [advantages, setAdvantages] = useState("");
   const [loadClass, setLoadClass] = useState("");
   const [thickness, setThickness] = useState(0);
-  const [basis, setBasis] = useState("");
   const [protectiveLayerThickness, setProtectiveLayerThickness] = useState("");
+  const [layingMethod, setLayingMethod] = useState("");
+  const [texture, setTexture] = useState("");
+  const [chamfer, setChamfer] = useState("");
   const [warmFloor, setWarmFloor] = useState(false);
-  const [warrantyPeriod, setWarrantyPeriod] = useState("");
   const [country, setCountry] = useState("");
   const [image, setImage] = useState("");
   const [visible, setVisible] = useState(false);
-  const [patternType, setPatternType] = useState("");
   const [collectionPrice, setCollectionPrice] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
   const [value, toggle] = useToggle([true, false]);
-  const [linoleumCollection] = useFetchData(
-    `/linoleum/${collection}/collection`
+  const [vinylFlooringCollection] = useFetchData(
+    `/vinyl-flooring/${collection}/collection`
   );
-  const sortedCollection = useSortData(linoleumCollection, "position");
+  const sortedCollection = useSortData(vinylFlooringCollection, "position");
 
   const resetState = () => {
     setPosition(0);
@@ -52,43 +52,40 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
     setAdvantages("");
     setLoadClass("");
     setThickness(0);
-    setBasis("");
-    setProtectiveLayerThickness("");
+    setChamfer("");
     setWarmFloor(false);
-    setWarrantyPeriod("");
     setCountry("");
     setImage("");
     setVisible(false);
-    setPatternType("");
     setCollectionPrice(0);
   };
 
   const handleEditVisible = (vendor) => {
     toggle();
     const handleSubmitChangeVisible = () => {
-      update(ref(db, `/linoleum/${collection}/collection/${vendor.name}`), {
-        visible: value,
-      });
+      update(
+        ref(db, `/vinyl-flooring/${collection}/collection/${vendor.name}`),
+        {
+          visible: value,
+        }
+      );
     };
     handleSubmitChangeVisible();
   };
 
-  const handleSubmitChangeLinoleum = () => {
-    update(ref(db, `/linoleum/${collection}/collection/${name}`), {
+  const handleSubmitChangeVinylFlooring = () => {
+    update(ref(db, `/vinyl-flooring/${collection}/collection/${name}`), {
       name,
       position,
       description,
       advantages,
       loadClass,
       thickness,
-      basis,
-      protectiveLayerThickness,
+      chamfer,
       warmFloor,
-      warrantyPeriod,
       country,
       image,
       visible,
-      patternType,
       collectionPrice,
     });
 
@@ -96,7 +93,7 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
     handlers.close();
     setIsEdit(false);
   };
-  const handleEditLinoleum = (vendor) => {
+  const handleEditVinylFlooring = (vendor) => {
     setIsEdit(true);
     setPosition(vendor.position);
     setName(vendor.name);
@@ -104,14 +101,11 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
     setAdvantages(vendor.advantages);
     setLoadClass(vendor.loadClass);
     setThickness(vendor.thickness);
-    setBasis(vendor.basis);
-    setProtectiveLayerThickness(vendor.protectiveLayerThickness);
+    setChamfer(vendor.chamfer);
     setWarmFloor(vendor.warmFloor);
-    setWarrantyPeriod(vendor.warrantyPeriod);
     setCountry(vendor.country);
     setImage(vendor.image);
     setVisible(vendor.visible);
-    setPatternType(vendor.patternType);
     setCollectionPrice(vendor.collectionPrice);
     handlers.open();
   };
@@ -120,10 +114,10 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
     <>
       <AdminCollectionContainer
         data={sortedCollection}
-        editHandler={handleEditLinoleum}
+        editHandler={handleEditVinylFlooring}
         deleteHandler={handleDelete}
         visibleHandler={handleEditVisible}
-        vendors={"linoleum"}
+        vendors={"vinyl-flooring"}
         collection={collection}
         opened={opened}
         close={handlers.close}
@@ -131,7 +125,7 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
       >
         <form
           onSubmit={writeToDatabase(
-            `/linoleum/${collection}/collection/${name}`,
+            `/vinyl-flooring/${collection}/collection/${name}`,
             {
               name: name,
               position: position,
@@ -139,14 +133,13 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
               advantages: advantages,
               loadClass: loadClass,
               thickness: thickness,
-              basis: basis,
               protectiveLayerThickness: protectiveLayerThickness,
+              layingMethod: layingMethod,
+              chamfer: chamfer,
               warmFloor: warmFloor,
-              warrantyPeriod: warrantyPeriod,
               country: country,
               image: image,
               visible: visible,
-              patternType: patternType,
               collectionPrice: collectionPrice,
               uuid: uid(),
             },
@@ -181,6 +174,13 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
                 value={vendorCode}
                 onChange={(e) => setVendorCode(e.target.value)}
               />
+              <NumberInput
+                precision={2}
+                label="Толщина защитного слоя"
+                placeholder="Толщина защитного слоя"
+                value={protectiveLayerThickness}
+                onChange={(e) => setProtectiveLayerThickness(e.target.value)}
+              />
               <Textarea
                 placeholder="Описание коллекции"
                 label="Описание коллекции"
@@ -206,23 +206,10 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
                 onChange={(e) => setLoadClass(e.target.value)}
               />
               <TextInput
-                label="Основа"
-                placeholder="Основа"
-                value={basis}
-                onChange={(e) => setBasis(e.target.value)}
-              />
-              <NumberInput
-                precision={2}
-                label="Толщина защитного слоя"
-                placeholder="Толщина защитного слоя"
-                value={protectiveLayerThickness}
-                onChange={(e) => setProtectiveLayerThickness(e.target.value)}
-              />
-              <TextInput
-                label="Тип рисунка"
-                placeholder="Тип рисунка"
-                value={patternType}
-                onChange={(e) => setPatternType(e.target.value)}
+                label="Фаска"
+                placeholder="Фаска"
+                value={chamfer}
+                onChange={(e) => setChamfer(e.target.value)}
               />
               <NumberInput
                 precision={2}
@@ -230,6 +217,12 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
                 label="Толщина"
                 value={thickness}
                 onChange={setThickness}
+              />
+              <TextInput
+                placeholder="Способ укладки"
+                label="Способ укладки"
+                value={layingMethod}
+                onChange={(e) => setLayingMethod(e.target.value)}
               />
               <Group mt="sm">
                 <Checkbox
@@ -248,12 +241,6 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
                 />
               </Group>
               <TextInput
-                label="Гарантийный срок службы"
-                placeholder="Гарантийный срок службы"
-                value={warrantyPeriod}
-                onChange={(e) => setWarrantyPeriod(e.target.value)}
-              />
-              <TextInput
                 label="Страна производитель"
                 placeholder="Страна производитель"
                 value={country}
@@ -268,7 +255,7 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
             </Grid.Col>
           </Grid>
           {isEdit ? (
-            <Button onClick={handleSubmitChangeLinoleum}>Изменить</Button>
+            <Button onClick={handleSubmitChangeVinylFlooring}>Изменить</Button>
           ) : (
             <Button mt="md" type="submit">
               Отправить
@@ -279,4 +266,4 @@ const AdminLinoleumCollections = ({ writeToDatabase, handleDelete }) => {
     </>
   );
 };
-export default AdminLinoleumCollections;
+export default AdminVinylFlooringCollections;
