@@ -17,7 +17,6 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useToggle } from "@mantine/hooks";
-import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase";
@@ -26,19 +25,17 @@ import { ref, update, remove } from "firebase/database";
 import { Pencil, Trash, Eye, EyeOff } from "tabler-icons-react";
 import useSortData from "../../hooks/useSortData";
 
-const AdminLaminate = ({ writeToDatabase }) => {
+const AdminMaterialDoors = ({ writeToDatabase }) => {
   const colorScheme = useMantineColorScheme();
-  const { vendors } = useParams();
   const [opened, handlers] = useDisclosure(false, {
     onClose: () => resetStateVendors(),
   });
-  const [laminateVendors] = useFetchData(`/${vendors}/`);
+  const [laminateVendors] = useFetchData(`/interior-doors/`);
   const [name, setName] = useState("");
   const [position, setPosition] = useState(0);
   const [image, setImage] = useState("");
   const [visible, setVisible] = useState(false);
   const [description, setDescription] = useState("");
-  const [advantages, setAdvantages] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [value, toggle] = useToggle([true, false]);
 
@@ -54,7 +51,6 @@ const AdminLaminate = ({ writeToDatabase }) => {
     setImage("");
     setVisible(false);
     setDescription("");
-    setAdvantages("");
   };
 
   const handleEdit = (vendor) => {
@@ -64,13 +60,12 @@ const AdminLaminate = ({ writeToDatabase }) => {
     setImage(vendor.image);
     setVisible(vendor.visible);
     setDescription(vendor.description);
-    setAdvantages(vendor.advantages);
     handlers.open();
   };
   const handleEditVisible = (vendor) => {
     toggle();
     const handleSubmitChangeVisible = () => {
-      update(ref(db, `/${vendors}/${vendor.name}`), {
+      update(ref(db, `/interior-doors/${vendor.name}`), {
         visible: value,
       });
     };
@@ -78,20 +73,18 @@ const AdminLaminate = ({ writeToDatabase }) => {
   };
 
   const handleSubmitChange = () => {
-    update(ref(db, `/${vendors}/${name}`), {
+    update(ref(db, `/interior-doors/${name}`), {
       name,
       position,
       image,
       visible,
       description,
-      advantages,
     });
 
     resetStateVendors();
     handlers.close();
     setIsEdit(false);
   };
-
   return (
     <>
       <Modal
@@ -104,14 +97,13 @@ const AdminLaminate = ({ writeToDatabase }) => {
         <form
           id="driver-form"
           onSubmit={writeToDatabase(
-            `/${vendors}/${name}`,
+            `/interior-doors/${name}`,
             {
               name: name,
               position: position,
               image: image,
               visible: visible,
               description: description,
-              advantages: advantages,
               uuid: uid(),
             },
             resetStateVendors,
@@ -136,6 +128,7 @@ const AdminLaminate = ({ writeToDatabase }) => {
             placeholder="Картинка"
             value={image}
             onChange={(e) => setImage(e.target.value)}
+            required
           />
           <Checkbox
             mt="xs"
@@ -152,14 +145,6 @@ const AdminLaminate = ({ writeToDatabase }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <Textarea
-            placeholder="Преимущества производителя"
-            label="Преимущества производителя"
-            autosize
-            minRows={3}
-            value={advantages}
-            onChange={(e) => setAdvantages(e.target.value)}
-          />
           {isEdit ? (
             <Button onClick={handleSubmitChange}>Изменить</Button>
           ) : (
@@ -170,19 +155,19 @@ const AdminLaminate = ({ writeToDatabase }) => {
         </form>
       </Modal>
       <Group position="apart">
-        <Title order={2}>Производители</Title>
+        <Title order={2}>Материалы отделки</Title>
         <Button onClick={handlers.open} variant="default">
-          Добавить производителя
+          Добавить материал
         </Button>
       </Group>
       <Grid mt="lg">
         {vendorsSorted.map((item, index) => {
           return (
             <Grid.Col sm={6} xs={12} md={4} lg={3} xl={2} key={index}>
-              <Card shadow="sm" padding="xl" component={Link} to={item.name}>
-                <Card.Section p="md">
+              <Card shadow="sm" component={Link} to={item.name}>
+                <Card.Section>
                   <Image
-                    fit="contain"
+                    padding="xs"
                     src={item.image}
                     height={160}
                     alt={item.name}
@@ -249,4 +234,4 @@ const AdminLaminate = ({ writeToDatabase }) => {
     </>
   );
 };
-export default AdminLaminate;
+export default AdminMaterialDoors;

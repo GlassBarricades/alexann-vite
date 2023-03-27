@@ -29,7 +29,7 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
   const [advantages, setAdvantages] = useState("");
   const [loadClass, setLoadClass] = useState("");
   const [thickness, setThickness] = useState(0);
-  const [protectiveLayerThickness, setProtectiveLayerThickness] = useState("");
+  const [protectiveLayerThickness, setProtectiveLayerThickness] = useState(0);
   const [layingMethod, setLayingMethod] = useState("");
   const [texture, setTexture] = useState("");
   const [chamfer, setChamfer] = useState("");
@@ -52,6 +52,9 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
     setAdvantages("");
     setLoadClass("");
     setThickness(0);
+    setProtectiveLayerThickness(0);
+    setLayingMethod("");
+    setTexture("");
     setChamfer("");
     setWarmFloor(false);
     setCountry("");
@@ -81,6 +84,9 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
       advantages,
       loadClass,
       thickness,
+      protectiveLayerThickness,
+      layingMethod,
+      texture,
       chamfer,
       warmFloor,
       country,
@@ -101,6 +107,9 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
     setAdvantages(vendor.advantages);
     setLoadClass(vendor.loadClass);
     setThickness(vendor.thickness);
+    setProtectiveLayerThickness(vendor.setProtectiveLayerThickness);
+    setLayingMethod(vendor.layingMethod);
+    setTexture(vendor.texture);
     setChamfer(vendor.chamfer);
     setWarmFloor(vendor.warmFloor);
     setCountry(vendor.country);
@@ -135,6 +144,7 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
               thickness: thickness,
               protectiveLayerThickness: protectiveLayerThickness,
               layingMethod: layingMethod,
+              texture: texture,
               chamfer: chamfer,
               warmFloor: warmFloor,
               country: country,
@@ -223,6 +233,12 @@ const AdminVinylFlooringCollections = ({ writeToDatabase, handleDelete }) => {
                 label="Способ укладки"
                 value={layingMethod}
                 onChange={(e) => setLayingMethod(e.target.value)}
+              />
+              <TextInput
+                placeholder="Текстура"
+                label="Текстура"
+                value={texture}
+                onChange={(e) => setTexture(e.target.value)}
               />
               <Group mt="sm">
                 <Checkbox
