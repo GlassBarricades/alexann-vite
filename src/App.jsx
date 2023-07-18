@@ -1,5 +1,10 @@
 import { HeaderSimple } from "./components/Header";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 import HomePage from "./components/pages/HomePage";
 import { ContactsPage } from "./components/pages/ContactsPage";
 import ServicesPage from "./components/pages/ServicesPage";
@@ -11,38 +16,9 @@ import AdminPage from "./components/pages/AdminPage";
 import VendorPage from "./components/catalog/VendorPage";
 import CollectionPage from "./components/catalog/CollectionPage";
 import ColorPage from "./components/catalog/ColorPage";
+import LayoutPage from "./components/LayoutPage";
 
-function App() {
-  const links = [
-    {
-      link: "/",
-      label: "Главная",
-    },
-    {
-      link: "/catalog",
-      label: "Каталог",
-    },
-    {
-      link: "/services",
-      label: "Услуги",
-    },
-    {
-      link: "/delivery",
-      label: "Доставка",
-    },
-    {
-      link: "/about-us",
-      label: "О нас",
-    },
-    {
-      link: "/contacts",
-      label: "Контакты",
-    },
-    {
-      link: "/admin/laminate",
-      label: "Админка",
-    },
-  ];
+const App = () => {
   const dataCategory = [
     {
       name: "Ламинат",
@@ -106,40 +82,43 @@ function App() {
     },
   ];
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/" element={<LayoutPage />}>
+          <Route index element={<HomePage />} />
+          <Route
+          path="catalog/"
+          element={<CatalogPage dataCategory={dataCategory} />}
+        />
+        <Route
+          path="catalog/:category"
+          element={<CatalogGrid dataCategory={dataCategory} />}
+        />
+        <Route path="contacts" element={<ContactsPage />} />
+        <Route path="services" element={<ServicesPage />} />
+        <Route path="about-us" element={<AboutUsPage />} />
+        <Route path="catalog/:category/:vendor" element={<VendorPage />} />
+        <Route
+          path="catalog/:category/:vendor/:collection"
+          element={<CollectionPage />}
+        />
+        <Route
+          path="catalog/:category/:vendor/:collection/:color"
+          element={<ColorPage />}
+        />
+        <Route path="delivery" element={<DeliveryPage />} />
+        </Route>
+        <Route
+          path="admin/*"
+          element={<AdminPage dataCategory={dataCategory} />}
+        />
+      </>
+    )
+  )
+
   return (
-    <BrowserRouter>
-      <div className="App">
-        <HeaderSimple links={links} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="contacts" element={<ContactsPage />} />
-          <Route path="services" element={<ServicesPage />} />
-          <Route path="about-us" element={<AboutUsPage />} />
-          <Route
-            path="catalog/"
-            element={<CatalogPage dataCategory={dataCategory} />}
-          />
-          <Route
-            path="catalog/:category"
-            element={<CatalogGrid dataCategory={dataCategory} />}
-          />
-          <Route path="catalog/:category/:vendor" element={<VendorPage />} />
-          <Route
-            path="catalog/:category/:vendor/:collection"
-            element={<CollectionPage />}
-          />
-          <Route
-            path="catalog/:category/:vendor/:collection/:color"
-            element={<ColorPage />}
-          />
-          <Route path="delivery" element={<DeliveryPage />} />
-          <Route
-            path="admin/*"
-            element={<AdminPage dataCategory={dataCategory} />}
-          />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <RouterProvider router={router}></RouterProvider>
   );
 }
 

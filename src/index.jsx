@@ -21,6 +21,20 @@ function Main() {
     >
       <MantineProvider
         theme={{
+          globalStyles: (theme) => ({
+            ".active": {
+              "&, &:hover": {
+                backgroundColor: theme.fn.variant({
+                  variant: "light",
+                  color: theme.primaryColor,
+                }).background,
+                color: theme.fn.variant({
+                  variant: "light",
+                  color: theme.primaryColor,
+                }).color,
+              },
+            },
+          }),
           colorScheme: colorScheme,
           components: {
             Text: {

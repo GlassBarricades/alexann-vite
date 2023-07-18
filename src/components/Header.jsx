@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useLocalStorage } from "@mantine/hooks";
 import {
   createStyles,
   Header,
@@ -8,11 +6,11 @@ import {
   Burger,
   Anchor,
   Image,
-  Drawer,
+  MediaQuery,
+  useMantineTheme
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { ThemeChange } from "./Theme-change";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -20,6 +18,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     height: "100%",
+    width: "100%",
   },
 
   links: {
@@ -67,60 +66,48 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function HeaderSimple({ links }) {
-  const [opened, { toggle }] = useDisclosure(false);
-  //const [active, setActive] = useState(links[0].link);
+export function HeaderSimple({ opened, setOpened, links }) {
+  const theme = useMantineTheme();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useLocalStorage({
-    key: "active-link",
-    defaultValue: links[0].link,
-    getInitialValueInEffect: true,
-  });
 
   const items = links.map((link) => (
     <Anchor
-      component={Link}
+      component={NavLink}
       to={link.link}
       key={link.label}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-      onClick={() => {
-        setActive(link.link);
-      }}
+      className={classes.link}
     >
       {link.label}
     </Anchor>
   ));
 
   return (
-    <Header
-      height={60}
-      styles={() => ({
-        root: {
-          position: "sticky",
-        },
-      })}
-    >
-      <Container className={classes.header}>
-        <Image
-          src={"https://aleksann.by/wp-content/themes/oceanic/images/logo.png"}
-          width={130}
-        />
-        <Group spacing={5} className={classes.links}>
-          {items}
-        </Group>
-        <ThemeChange />
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          className={classes.burger}
-          size="sm"
-        />
-      </Container>
-      <Drawer opened={opened} onClose={close} title="Меню">
-        123
-      </Drawer>
+    <Header height={{ base: 50, md: 70 }} p="md">
+      <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+        <MediaQuery largerThan="md" styles={{ display: "none" }}>
+          <Burger
+            opened={opened}
+            onClick={() => setOpened((o) => !o)}
+            size="sm"
+            color={theme.colors.gray[6]}
+            mr="xl"
+          />
+        </MediaQuery>
+
+        <Container className={classes.header}>
+          <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <Image
+              src={"https://aleksann.by/wp-content/themes/oceanic/images/logo.png"}
+              width={130}
+            />
+          </MediaQuery>
+
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+          <ThemeChange />
+        </Container>
+      </div>
     </Header>
   );
 }

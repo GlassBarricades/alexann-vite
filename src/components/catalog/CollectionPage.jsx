@@ -41,7 +41,7 @@ const CollectionPage = () => {
     waterResistance,
   } = collectionData;
   return (
-    <Container>
+    <>
       <Title mt="lg">{collection}</Title>
       <Grid mt="lg">
         {colorsData.map((item) => {
@@ -86,7 +86,7 @@ const CollectionPage = () => {
         <Text>{waterResistance}</Text>
         <Text>{country}</Text>
       </Stack>
-    </Container>
+    </>
   );
 };
 export default CollectionPage;

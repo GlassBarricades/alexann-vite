@@ -1,4 +1,4 @@
-import { Container, Title, Card, Grid, Image, Text } from "@mantine/core";
+import { Title, Card, Grid, Image, Text } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 
@@ -19,7 +19,7 @@ const CatalogGrid = ({ dataCategory }) => {
   })
 
   return (
-    <Container>
+    <>
       <Title mt="md">{title[0].name}</Title>
       <Grid mt="xs">
         {fileredVendorData.map((item, index) => {
@@ -43,7 +43,7 @@ const CatalogGrid = ({ dataCategory }) => {
           );
         })}
       </Grid>
-    </Container>
+    </>
   );
 };
 export default CatalogGrid;

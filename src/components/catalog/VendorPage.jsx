@@ -26,7 +26,7 @@ const VendorPage = () => {
   });
 
   return (
-    <Container>
+    <>
       <Group mt="md" position="apart">
         <Title>{name}</Title>
         <Image fit="contain" width={220} src={image} alt={name} />
@@ -59,7 +59,7 @@ const VendorPage = () => {
           <Text>{advantages}</Text>
         </Stack>
       </Stack>
-    </Container>
+    </>
   );
 };
 export default VendorPage;
